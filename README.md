@@ -1,1 +1,1 @@
-# py-amore
+# py-amore: Automated Morality Extractor
