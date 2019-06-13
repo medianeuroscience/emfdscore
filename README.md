@@ -12,7 +12,9 @@ TODO.
 AMorE lets users choose between three dictionaries when scoring documents: 
 
 1.) The extended Moral Foundations Dictionary (e-MFD; under review) 
+
 2.) The Moral Foundations Dicitonary 2.0 (Frimer et al., 2017; https://osf.io/xakyw/ )
+
 3.) The original Moral Foundations Dictionary (https://moralfoundations.org/othermaterials) 
 
 ## Returned metrics
