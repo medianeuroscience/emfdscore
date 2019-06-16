@@ -1,11 +1,11 @@
 from setuptools import setup
 
-setup(name='py-amore',
+setup(name='amore',
       version='0.1',
-      description='The Automated Morality Extractor (AMorE)',
+      description='Automated Morality Extraction (AMorE) for Python',
       url='Anonymized.',
       author='Anonymized.',
       author_email='Anonymized.',
       license='MIT',
-      packages=['py-amore'],
+      packages=['amore'],
       zip_safe=False)
