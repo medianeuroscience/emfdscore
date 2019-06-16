@@ -33,7 +33,7 @@ Slightly different output metrics are provided depending on the dictionary that 
 
 _e-MFD_: 
 - Five scores that denote the average presence of each moral foundation (columns ending with _p_) 
-- Five scores that denote the upholding or violation of each moral foundation (columns ending with _sent_) 
+- Five scores that denote the upholding (positive values) or violation (negative values) of each moral foundation (columns ending with _sent_) 
 - The variance across the five moral foundation scores 
 - The variance across the five sentiment scores
 - A ratio of detected moral words to non-moral words
@@ -43,4 +43,11 @@ _MFD2.0_ & _MFD_:
 - The variance across the ten moral foundation scores 
 - A ratio of detected moral words to non-moral words
 
+**PAT Scoring**
 
+When choosing the pat option for document scoring, the returned CSV is sorted and indexed by each mentioned entity across input documents. Note that duplicate entity mentions are possible and deliberate. For each entitiy, the following variables are provided:
+
+- agent_words: Moral words for which the entity was declared the actor/agent 
+- patient_words: Moral words for which the entity was declared the patient/target
+- attribute_words: Moral words used to describe the entitiy (usually very few detected) 
+- For each of the above categories, ten variables are computed. The first five specify the average presence of each moral foundation across the detected words (columns ending with _p_). The second five specify the average upholding (positive values)/violation(negative values) of each moral foundation (columns ending with _sent_). 
