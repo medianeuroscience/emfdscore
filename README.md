@@ -15,11 +15,11 @@ A typical command specifies the following:
 
 `$amore [INPUT.CSV] [DICT_TYPE] [SCORING_METHOD] [OUTPUT.CSV]`
 
-- INPUT_TYPE = The path to a CSV in which the first column contains the document texts to be scored. Each row should reflect its own document. See the template_input.csv for an example file. 
+- INPUT.CSV = The path to a CSV in which the first column contains the document texts to be scored. Each row should reflect its own document. See the template_input.csv for an example file format. 
 
 - DICT_TYPE = Declares which MFD is applied to score documents. In its current version, AMorE lets users choose between three dictionaries: `emfd` = extended Moral Foundations Dictionary (e-MFD; under review); `mfd2` = Moral Foundations Dicitonary 2.0 (Frimer et al., 2017; https://osf.io/xakyw/ ); `mfd` = original Moral Foundations Dictionary (https://moralfoundations.org/othermaterials) 
 
-- SCORING_METHOD = Currently, AMorE employs two different scoring algorithms: `bow` is a classical Bag-of-Words approach in which the algorithm simply searches for word matches between document texts and the specified dictionary. `pat` relies on named entity recognition and syntactic dependency parsing. For each document, the algorithm first extracts all mentioned entities. Next, for each entitiy, AMorE extracts words that pertain to 1) moral verbs for which the entity is an agent argument (Agent verbs), 2) moral verbs for which the entity is the patient, theme, or other argument (Patient verbs), and other moral attributes (i.e., adjectival modifiers, appositives, etc.). **Note**: Only the emfd is currenlty supported for PAT extraction.
+- SCORING_METHOD = Currently, AMorE employs two different scoring algorithms: `bow` is a classical Bag-of-Words approach in which the algorithm simply searches for word matches between document texts and the specified dictionary. `pat` relies on named entity recognition and syntactic dependency parsing. For each document, the algorithm first extracts all mentioned entities. Next, for each entitiy, AMorE extracts words that pertain to 1) moral verbs for which the entity is an agent argument (Agent verbs), 2) moral verbs for which the entity is the patient, theme, or other argument (Patient verbs), and other moral attributes (i.e., adjectival modifiers, appositives, etc.). **Note**: Only the emfd is currenlty supported for PAT extraction. Additionally, this method is more computationally expensive and thus has a longer execution time. 
 
 - OUTPUT.csv = Specifies the file name of the generated output csv. 
 
@@ -28,4 +28,18 @@ Click on the below terminal for a usage demonstration.
 
 ## Returned Metrics
 **BoW Scoring**
-jasjsdfjasd 
+
+Slightly different output metrics are provided depending on the dictionary that was used for scoring. Regardless of dictionary type, each row in the output.csv contains the produced metrics for the respective document in the input.csv
+
+1) e-MFD: 
+1.1) Five scores that denote the average presence of each moral foundation (columns ending with _p_) 
+1.2) Five scores that denote the upholding or violation of each moral foundation (columns ending with _sent_) 
+1.3) The variance across the five moral foundation scores 
+1.4) The variance across the five sentiment scores
+1.5) A ratio of detected moral words to non-moral words
+
+2) MFD2.0 and MFD:
+2.1) Ten columns that denote the average presence of each moral foundation category. 
+
+
+
