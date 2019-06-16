@@ -6,6 +6,9 @@ When using AMorE, please consider citing the following article: redacted for ano
 
 AMorE can be installed via pip: `pip install py-amore`
 
+## Install 
+AMorE requires a Python installation (v3.5+). If your machine does not have installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS. 
+
 ## Usage 
 TODO.
 
