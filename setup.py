@@ -8,4 +8,15 @@ setup(name='amore',
       author_email='Anonymized.',
       license='MIT',
       packages=['amore'],
+      scripts=['bin/amore'],
+      package_data={'':['dictionaries/*', 'template_input.csv']},
+      include_package_data=True, 
+      install_requires=[
+          'pandas',
+          'progressbar2',
+          'spacy',
+          'sklearn',
+          'nltk',
+          'numpy'
+      ],
       zip_safe=False)
