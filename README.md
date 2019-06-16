@@ -25,7 +25,7 @@ A typical command specifies the following:
 
 - OUTPUT.csv = Specifies the file name of the generated output csv. 
 
-[![asciicast](https://asciinema.org/a/HcnMC8fyBqZD3BdTG0fxZNsNh.svg)](https://asciinema.org/a/HcnMC8fyBqZD3BdTG0fxZNsNh?autoplay=1&theme=solarized-light )
+[![asciicast](https://asciinema.org/a/HcnMC8fyBqZD3BdTG0fxZNsNh.svg)](https://asciinema.org/a/HcnMC8fyBqZD3BdTG0fxZNsNh?autoplay=1&theme=solarized-dark)
 
 ## Returned Metrics
 TODO. 
