@@ -32,11 +32,11 @@ Click on the below terminal for a usage demonstration.
 Slightly different output metrics are provided depending on the dictionary that was used for scoring. Regardless of dictionary type, each row in the output.csv contains the produced metrics for the respective document in the input.csv
 
 1) e-MFD: 
-1.1) Five scores that denote the average presence of each moral foundation (columns ending with _p_) 
-1.2) Five scores that denote the upholding or violation of each moral foundation (columns ending with _sent_) 
-1.3) The variance across the five moral foundation scores 
-1.4) The variance across the five sentiment scores
-1.5) A ratio of detected moral words to non-moral words
+- Five scores that denote the average presence of each moral foundation (columns ending with _p_) 
+- Five scores that denote the upholding or violation of each moral foundation (columns ending with _sent_) 
+- The variance across the five moral foundation scores 
+- The variance across the five sentiment scores
+- A ratio of detected moral words to non-moral words
 
 2) MFD2.0 and MFD:
 2.1) Ten columns that denote the average presence of each moral foundation category. 
