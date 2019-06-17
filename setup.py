@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pyamore',
-      version='0.0.7',
+      version='0.0.8',
       description='Automated Morality Extraction (AMorE) for Python',
       url='https://github.com/medianeuroscience/pyamore',
       author='Anonymized.',
