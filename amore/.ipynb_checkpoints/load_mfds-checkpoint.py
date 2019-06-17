@@ -6,18 +6,19 @@ import amore
 import os
 
 
-# Define path for module to allow dict imports. Find better way?
-path = os.path.dirname(amore.__file__)
+# Define path for module to allow dict imports. 
+fileDir = os.path.dirname(os.path.abspath(__file__))
+
 
 # Load E-MFD
-emfd = read_pickle(path+'/dictionaries/emfd_scoring.pkl')
+emfd = read_pickle(fileDir+'/dictionaries/emfd_scoring.pkl')
 probabilites = [c for c in emfd.columns if c.endswith('_p')]
 foundations = ['care','fairness','loyalty','authority','sanctity']
 senti = [c for c in emfd.columns if c.endswith('_sent')]
 emfd = emfd.T.to_dict()
 
 # Load MFD
-MFD = path+'/dictionaries/mft_original.dic'
+MFD = fileDir+'/dictionaries/mft_original.dic'
 nummap = dict()
 mfd = dict()
 mfd_regex = dict()
@@ -41,7 +42,7 @@ for v in mfd.keys():
     mfd_regex[v] = re.compile(fnmatch.translate(v))
     
 # Load MFD2.0 
-MFD2 = path+'/dictionaries/mfd2.0.dic'
+MFD2 = fileDir+'/dictionaries/mfd2.0.dic'
 nummap = dict()
 mfd2 = dict()
 wordmode = True

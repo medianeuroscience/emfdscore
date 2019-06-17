@@ -1,4 +1,13 @@
 from setuptools import setup
+from setuptools.command.install import install
+from subprocess import check_call
+
+class LoadSpacyLanguage(install):
+    """Ensures that spaCy language model is loaded"""
+    def run(self):
+        check_call("python -m spacy download en".split())
+        install.run(self)
+
 
 setup(name='amore',
       version='0.1',
@@ -18,4 +27,5 @@ setup(name='amore',
           'nltk',
           'numpy'
       ],
+      cmdclass={'install': LoadSpacyLanguage},
       zip_safe=False)
