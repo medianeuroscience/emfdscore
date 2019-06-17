@@ -5,9 +5,11 @@ The Automated Morality Extractor (AMorE) is a Python library for the fast and fl
 When using AMorE, please consider citing the following article: redacted for anonymous review. 
 
 ## Install 
-AMorE requires a Python installation (v3.5+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS. 
+AMorE requires a Python installation (v3.5+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS.
 
-Once Anaconda/Miniconda is installed, you can install AMorE by opening a terminal and typing: `pip install pyamore`
+For best practises, we recommend installing AMorE into a virtual conda environment.
+
+Once Anaconda/Miniconda is installed, you can install AMorE by opening a terminal and typing: `pip install -i https://test.pypi.org/simple/ pyamore`
 
 After installing pyAMorE, please install the latest version of spaCy by running the following two commands in your terminal:
 
