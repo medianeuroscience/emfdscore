@@ -9,7 +9,9 @@ AMorE requires a Python installation (v3.5+). If your machine does not have Pyth
 
 For best practises, we recommend installing AMorE into a virtual conda environment.
 
-Once Anaconda/Miniconda is installed, you can install AMorE by opening a terminal and typing: `pip install -i https://test.pypi.org/simple/ pyamore`
+Once Anaconda/Miniconda is installed, you can install AMorE by opening a terminal, copy, paste, and execute the following command: `pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple pyamore`
+
+**NOTE** The install command will be simplified after publication. 
 
 After installing pyAMorE, please install the latest version of spaCy by running the following two commands in your terminal:
 
