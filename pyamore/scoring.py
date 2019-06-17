@@ -1,3 +1,4 @@
+import nltk
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.stop_words import ENGLISH_STOP_WORDS
 import spacy

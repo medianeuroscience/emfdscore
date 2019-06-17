@@ -1,15 +1,18 @@
 # ❤ Py-AMorE: Automated Morality Extraction for Python
 
-The Automated Morality Extractor (AMorE) is a Python library for the fast and flexible extraction of various moral information metrics from textual input data. AMoRe is build on [spaCy](https://github.com/explosion/spaCy) for faster execution and performs minimal preprocessing consisting of tokenziation, syntactic dependency parsing, lower-casing, and stopword/punctuation/whitespace removal. AMorE lets users employ and compare **multiple Moral Foundations Dictionaries**, provides **various metrics for analyzing moral information**, and extracts **moral patient, agent, and attribute words** related to entities.
+The Automated Morality Extraction for Python (Py-AMorE) is a Python library for the fast and flexible extraction of various moral information metrics from textual input data. AMoRe is build on [spaCy](https://github.com/explosion/spaCy) for faster execution and performs minimal preprocessing consisting of tokenziation, syntactic dependency parsing, lower-casing, and stopword/punctuation/whitespace removal. Py-AMorE lets users employ and compare **multiple Moral Foundations Dictionaries**, provides **various metrics for analyzing moral information**, and extracts **moral patient, agent, and attribute words** related to entities.
     
-When using AMorE, please consider citing the following article: redacted for anonymous review. 
+When using Py-AMorE, please consider citing the following article: redacted for anonymous review.
 
 ## Install 
-AMorE requires a Python installation (v3.5+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS.
+Py-AMorE requires a Python installation (v3.5+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS.
 
-For best practises, we recommend installing AMorE into a virtual conda environment.
+For best practises, we recommend installing AMorE into a virtual conda environment:
+`conda create -n yourenvname python=3.5`
 
-Once Anaconda/Miniconda is installed, you can install AMorE by opening a terminal, copy, paste, and execute the following command: `pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple pyamore`
+`source activate yourenvname`
+
+Once Anaconda/Miniconda is installed and the env activated, you can install AMorE by copying, pasting, and executing the following command: `pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple pyamore`
 
 **NOTE** The install command will be simplified after publication. 
 
@@ -33,8 +36,8 @@ A typical command specifies the following:
 
 - OUTPUT.csv = Specifies the file name of the generated output csv. 
 
-Click on the below terminal for a usage demonstration. 
-[![asciicast](https://asciinema.org/a/HcnMC8fyBqZD3BdTG0fxZNsNh.svg)](https://asciinema.org/a/HcnMC8fyBqZD3BdTG0fxZNsNh?autoplay=1&theme=solarized-dark)
+Click on the below terminal for a usage demonstration.
+[![asciicast](https://asciinema.org/a/pE2VgwtS8Z3A2uUIZcuayLVWq.svg)](https://asciinema.org/a/pE2VgwtS8Z3A2uUIZcuayLVWq?autoplay=1&theme=solarized-dark)
 
 ## Returned Metrics
 **BoW Scoring**
@@ -55,9 +58,9 @@ _MFD2.0_ & _MFD_:
 
 **PAT Scoring**
 
-When choosing the pat option for document scoring, the returned CSV is sorted and indexed by each mentioned entity across input documents. Note that duplicate entity mentions are possible and deliberate. For each entitiy, the following variables are provided:
+When choosing the pat option for document scoring, the returned CSV is sorted and indexed by each mentioned entity across input documents. Note that duplicate entity mentions are possible and deliberate. For each entity, the following variables are provided:
 
 - agent_words: Moral words for which the entity was declared the actor/agent 
 - patient_words: Moral words for which the entity was declared the patient/target
-- attribute_words: Moral words used to describe the entitiy (usually very few detected) 
+- attribute_words: Moral words used to describe the entity (usually very few detected)
 - For each of the above categories, ten variables are computed. The first five specify the average presence of each moral foundation across the detected words (columns ending with _p_). The second five specify the average upholding (positive values)/violation(negative values) of each moral foundation (columns ending with _sent_). 

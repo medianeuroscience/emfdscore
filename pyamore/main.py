@@ -35,7 +35,7 @@ if SCORE_METHOD == 'bow':
     df.to_csv(OUT_CSV_PATH, index=False)
     
 if SCORE_METHOD == 'pat':
-    df = pat_docs(csv,DICT_TYPE,num_docs)
+    df = pat_docs(csv,num_docs)
     df.to_csv(OUT_CSV_PATH, index=False)
 
 print('Scoring completed.')
