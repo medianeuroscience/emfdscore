@@ -3,11 +3,16 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 from pandas import DataFrame, read_pickle
 import amore
-import os
+import sys,os
 
 
-# Define path for module to allow dict imports. Find better way?
-path = os.path.dirname(amore.__file__)
+# Define path for module to allow dict imports. 
+absFilePath = os.path.abspath(__file__)
+print(absFilePath)
+fileDir = os.path.dirname(os.path.abspath(__file__))
+print(fileDir)
+parentDir = os.path.dirname(fileDir)
+print(parentDir)
 
 # Load E-MFD
 emfd = read_pickle(path+'/dictionaries/emfd_scoring.pkl')

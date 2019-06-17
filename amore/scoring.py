@@ -56,14 +56,18 @@ def score_mfd(doc):
     '''Scores documents with the original MFD.'''
     
     mfd_score = {k:0 for k in mfd_foundations}
-    moral_words = []
+    moral_words = 0
+    
     for token in doc:
         for v in mfd_regex.keys():
             if mfd_regex[v].match(token):
+                moral_words += 1
                 for f in mfd[v]:
                     mfd_score[f] += 1
     
     mfd_score = {k:v/len(doc) for k,v in mfd_score.items()}
+    nonmoral_words = len(doc)-len(moral_words)
+    mfd_score['moral_nonmoral_ratio'] =  len(moral_words)/nonmoral_words
     
     return mfd_score
 
@@ -77,6 +81,8 @@ def score_mfd2(doc):
     f_counts = Counter(moral_words)
     mfd2_score.update(f_counts)    
     mfd2_score = {k:v/len(doc) for k,v in mfd2_score.items()}
+    nonmoral_words = len(doc)-len(moral_words)
+    mfd2_score['moral_nonmoral_ratio'] =  len(moral_words)/nonmoral_words
     
     return mfd2_score
 
@@ -87,7 +93,7 @@ def score_docs(csv, dic_type, num_docs):
     dict_type specifies the dicitonary with which the documents should be scored.
     Accepted values are: [emfd, mfd, mfd2]'''
     
-    nlp = spacy.load('en', disable=['ner', 'parser', 'tagger'])
+    nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
     nlp.add_pipe(tokenizer, name="mfd_tokenizer")
     
     if dic_type == 'emfd':
@@ -117,8 +123,17 @@ def score_docs(csv, dic_type, num_docs):
     df = pd.DataFrame(scored_docs)
     
     if dic_type == 'emfd':
+        # Calculate variance
         df['f_var'] = df[probabilites].var(axis=1)
         df['sent_var'] = df[senti].var(axis=1)
+        
+    if dic_type == 'mfd' or dic_type == 'mfd2':
+        # Calculate variance
+        mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
+       'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
+       'sanctity.virtue', 'authority.vice', 'sanctity.vice']
+        
+        df['f_var'] = df[mfd_foundations].var(axis=1)
         
     return df
 
@@ -270,7 +285,7 @@ def pat_docs(csv,DICT_TYPE,num_docs):
     to execute PAT extraction'''
     
     # Build spaCy pipeline
-    nlp = spacy.load('en')
+    nlp = spacy.load('en_core_web_sm')
     nlp.add_pipe(spaCy_NER, name='NER')
     nlp.add_pipe(extract_dependencies, name='PAT extraction')
     nlp.add_pipe(drop_ents, name='drop empty entities')

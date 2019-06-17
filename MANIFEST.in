@@ -1,0 +1,3 @@
+include README.md 
+include amore/dictionaries/* 
+inclure amore/template_input.csv 
