@@ -2,6 +2,7 @@ from setuptools import setup
 from setuptools.command.install import install
 from subprocess import check_call
 
+
 class LoadSpacyLanguage(install):
     """Ensures that spaCy language model is loaded"""
     def run(self):
@@ -9,7 +10,7 @@ class LoadSpacyLanguage(install):
         install.run(self)
 
 
-setup(name='amore',
+setup(name='pyamore',
       version='0.1',
       description='Automated Morality Extraction (AMorE) for Python',
       url='https://github.com/medianeuroscience/amore',
