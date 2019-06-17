@@ -9,6 +9,12 @@ from collections import Counter
 from pyamore.load_mfds import *
 import progressbar
 
+try:
+    nltk_stopwords = stopwords.words('english')
+except:
+    print('NLTK stopwords missing, downloading now.')
+    nltk.download('stopwords')
+    
 nltk_stopwords = stopwords.words('english')
 stopwords = set(list(nltk_stopwords) + list(ENGLISH_STOP_WORDS) + list(STOP_WORDS))
 
