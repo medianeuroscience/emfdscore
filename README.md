@@ -17,7 +17,7 @@ After installing pyAMorE, please install the latest version of spaCy by running 
 
 `pip install -U spacy`
 
-`python -m spacy down`
+`python -m spacy download en`
 
 ## Usage 
 AMorE is executed via the command line (terminal). 
