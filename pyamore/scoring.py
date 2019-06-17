@@ -73,7 +73,7 @@ def score_mfd(doc):
                     mfd_score[f] += 1
     
     mfd_score = {k:v/len(doc) for k,v in mfd_score.items()}
-    nonmoral_words = len(doc)-len(moral_words)
+    nonmoral_words = len(doc)-moral_words
     mfd_score['moral_nonmoral_ratio'] =  len(moral_words)/nonmoral_words
     
     return mfd_score
