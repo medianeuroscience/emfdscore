@@ -9,7 +9,7 @@ import pandas as pd
 from spacy.lang.en.stop_words import STOP_WORDS
 stopwords = set(list(nltk_stopwords) + list(ENGLISH_STOP_WORDS) + list(STOP_WORDS))
 from collections import Counter
-from amore.load_mfds import * 
+from pyamore.load_mfds import *
 import progressbar, time
 
 #### BoW Scoring ####

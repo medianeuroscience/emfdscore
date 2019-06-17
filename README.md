@@ -7,13 +7,19 @@ When using AMorE, please consider citing the following article: redacted for ano
 ## Install 
 AMorE requires a Python installation (v3.5+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS. 
 
-Once Anaconda/Miniconda is installed, you can install AMorE by opening a terminal and typing: `pip install amore`
+Once Anaconda/Miniconda is installed, you can install AMorE by opening a terminal and typing: `pip install pyamore`
+
+After installing pyAMorE, please install the latest version of spaCy by running the following two commands in your terminal:
+
+`pip install -U spacy`
+
+`python -m spacy down`
 
 ## Usage 
 AMorE is executed via the command line (terminal). 
 A typical command specifies the following: 
 
-`$amore [INPUT.CSV] [DICT_TYPE] [SCORING_METHOD] [OUTPUT.CSV]`
+`$pyamore [INPUT.CSV] [DICT_TYPE] [SCORING_METHOD] [OUTPUT.CSV]`
 
 - INPUT.CSV = The path to a CSV in which the first column contains the document texts to be scored. Each row should reflect its own document. See the template_input.csv for an example file format. 
 

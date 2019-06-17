@@ -4,7 +4,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd 
 import argparse
-from amore.scoring import score_docs, pat_docs
+from pyamore.scoring import score_docs, pat_docs
 
 parser = argparse.ArgumentParser(description='Extract moral informtion from textual documents with AMorE.')
 
