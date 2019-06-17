@@ -15,8 +15,8 @@ try:
 except:
     print('NLTK stopwords missing, downloading now.')
     nltk.download('stopwords')
-    
-nltk_stopwords = stopwords.words('english')
+    nltk_stopwords = stopwords.words('english')
+
 stopwords = set(list(nltk_stopwords) + list(ENGLISH_STOP_WORDS) + list(STOP_WORDS))
 
 # BoW Scoring #
@@ -28,15 +28,18 @@ def tokenizer(doc):
     stopword/punctuation/whitespace removal. 
     Returns list of processed tokens"""
     
-    return  [x.lower_ for x in doc if x.lower_ not in stopwords and not x.is_punct and not x.is_digit and not x.is_quote and not x.like_num and not x.is_space] 
+    return [x.lower_ for x in doc if x.lower_ not in stopwords and not x.is_punct and not x.is_digit and not x.is_quote and not x.like_num and not x.is_space]
 
 
 def score_emfd(doc):
     
     """Scores documents with the e-MFD."""
-    
-    emfd_score = {k:0 for k in probabilites+senti}
-    moral_words = [ emfd[token] for token in doc if token in emfd.keys() ]
+
+    # Initiate dictionary to store scores
+    emfd_score = {k: 0 for k in probabilites+senti}
+
+    # Collect e-MFD data for all moral words in document
+    moral_words = [emfd[token] for token in doc if token in emfd.keys()]
     
     for dic in moral_words:
         emfd_score['care_p'] += dic['care_p']
@@ -50,10 +53,15 @@ def score_emfd(doc):
         emfd_score['loyalty_sent'] += dic['loyalty_sent']
         emfd_score['authority_sent'] += dic['authority_sent']
         emfd_score['sanctity_sent'] += dic['sanctity_sent']
-    
-    emfd_score = {k:v/len(doc) for k,v in emfd_score.items()}
-    nonmoral_words = len(doc)-len(moral_words)
-    emfd_score['moral_nonmoral_ratio'] =  len(moral_words)/nonmoral_words 
+
+    if len(moral_words) != 0:
+        emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
+        nonmoral_words = len(doc)-len(moral_words)
+        emfd_score['moral_nonmoral_ratio'] = len(moral_words)/nonmoral_words
+    else:
+        emfd_score = {k: 0 for k in probabilites + senti}
+        nonmoral_words = len(doc) - len(moral_words)
+        emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
     
     return emfd_score
 
@@ -71,10 +79,15 @@ def score_mfd(doc):
                 moral_words += 1
                 for f in mfd[v]:
                     mfd_score[f] += 1
-    
-    mfd_score = {k:v/len(doc) for k,v in mfd_score.items()}
-    nonmoral_words = len(doc)-moral_words
-    mfd_score['moral_nonmoral_ratio'] = moral_words/nonmoral_words
+
+    if moral_words != 0:
+        mfd_score = {k: v/len(moral_words) for k, v in mfd_score.items()}
+        nonmoral_words = len(doc)-moral_words
+        mfd_score['moral_nonmoral_ratio'] = moral_words/nonmoral_words
+    else:
+        mfd_score = {k:0 for k in mfd_foundations}
+        nonmoral_words = len(doc) - moral_words
+        mfd_score['moral_nonmoral_ratio'] = moral_words / nonmoral_words
     
     return mfd_score
 
@@ -84,13 +97,19 @@ def score_mfd2(doc):
     """Scores documents with the MFD2."""
     
     mfd2_score = {k:0 for k in mfd2_foundations}
-    moral_words = [ mfd2[token]['foundation'] for token in doc if token in mfd2.keys() ]
+    moral_words = [mfd2[token]['foundation'] for token in doc if token in mfd2.keys()]
     f_counts = Counter(moral_words)
     mfd2_score.update(f_counts)    
-    mfd2_score = {k:v/len(doc) for k,v in mfd2_score.items()}
-    nonmoral_words = len(doc)-len(moral_words)
-    mfd2_score['moral_nonmoral_ratio'] =  len(moral_words)/nonmoral_words
-    
+
+    if len(moral_words) != 0:
+        mfd2_score = {k: v/len(moral_words) for k,v in mfd2_score.items()}
+        nonmoral_words = len(doc)-len(moral_words)
+        mfd2_score['moral_nonmoral_ratio'] = len(moral_words)/nonmoral_words
+    else:
+        mfd2_score = {k: 0 for k in mfd2_foundations}
+        nonmoral_words = len(doc) - len(moral_words)
+        mfd2_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+
     return mfd2_score
 
 
