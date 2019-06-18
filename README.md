@@ -1,4 +1,4 @@
-<img src=https://github.com/medianeuroscience/pyamore/blob/master/pyamore_logo.png width="250" height="90"> 
+<img src=https://github.com/medianeuroscience/pyamore/blob/master/pyamore_logo.png width="220" height="80"> 
 
 ***
 
