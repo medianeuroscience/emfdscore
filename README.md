@@ -9,21 +9,31 @@ When using PyAMorE, please consider citing the following article: _The extended 
 PyAMorE requires a Python installation (v3.5+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS.
 
 For best practises, we recommend installing PyAMorE into a virtual conda environment:
-`conda create -n yourenvname python=3.5`
+`
+conda create -n yourenvname python=3.5
+`
 
-`source activate yourenvname`
+`
+source activate yourenvname
+`
 
 Once Anaconda/Miniconda is installed and the env activated, you can install PyAMorE by copying, pasting, and executing the following command: 
 
-`pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple pyamore`
+`
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple pyamore
+`
 
 **NOTE** The install command will be simplified after publication. 
 
 After installing PyAMorE, please install the latest version of spaCy by running the following two commands in your terminal:
 
-`pip install -U spacy`
+`
+pip install -U spacy
+`
 
-`python -m spacy download en`
+`
+python -m spacy download en
+`
 
 ## Usage 
 PyAMorE is executed via the command line (terminal). 
