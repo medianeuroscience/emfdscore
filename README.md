@@ -39,7 +39,7 @@ python -m spacy download en
 PyAMorE is executed via the command line (terminal). 
 A typical command specifies the following: 
 
-`$pyamore [INPUT.CSV] [DICT_TYPE] [SCORING_METHOD] [OUTPUT.CSV]`
+`$ pyamore [INPUT.CSV] [DICT_TYPE] [SCORING_METHOD] [OUTPUT.CSV]`
 
 - INPUT.CSV = The path to a CSV in which the first column contains the document texts to be scored. Each row should reflect its own document. See the [template_input.csv](https://github.com/medianeuroscience/pyamore/blob/master/pyamore/template_input.csv) for an example file format.
 
