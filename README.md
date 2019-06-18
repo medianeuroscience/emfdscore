@@ -1,4 +1,4 @@
-## ❤ Py-AMorE: Automated Morality Extraction for Python
+## Py-AMorE: Automated Morality Extraction for Python
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/) [![Open Source Love png2](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 The Automated Morality Extraction for Python (Py-AMorE) is a Python library for the fast and flexible extraction of various moral information metrics from textual input data. AMoRe is build on [spaCy](https://github.com/explosion/spaCy) for faster execution and performs minimal preprocessing consisting of tokenization, syntactic dependency parsing, lower-casing, and stopword/punctuation/whitespace removal. Py-AMorE lets users employ and compare **multiple Moral Foundations Dictionaries**, provides **various metrics for analyzing moral information**, and extracts **moral patient, agent, and attribute words** related to entities.
