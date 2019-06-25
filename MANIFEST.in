@@ -1,3 +1,3 @@
 include README.md 
-include pyamore/dictionaries/*
-include pyamore/template_input.csv
+include emfdscore/dictionaries/*
+include emfdscore/template_input.csv

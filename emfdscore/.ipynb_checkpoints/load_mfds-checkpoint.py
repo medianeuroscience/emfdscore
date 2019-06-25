@@ -2,7 +2,7 @@ import re, fnmatch
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 from pandas import DataFrame, read_pickle
-import pyamore
+import emfdscore
 import os
 
 

@@ -1,45 +1,35 @@
-import nltk
 from nltk.corpus import stopwords
+nltk_stopwords = stopwords.words('english')
 from sklearn.feature_extraction.stop_words import ENGLISH_STOP_WORDS
 import spacy
-from spacy.lang.en.stop_words import STOP_WORDS
+import re, fnmatch
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
-from collections import Counter
-from pyamore.load_mfds import *
-import progressbar
-
-try:
-    nltk_stopwords = stopwords.words('english')
-except:
-    print('NLTK stopwords missing, downloading now.')
-    nltk.download('stopwords')
-    nltk_stopwords = stopwords.words('english')
-
+from spacy.lang.en.stop_words import STOP_WORDS
 stopwords = set(list(nltk_stopwords) + list(ENGLISH_STOP_WORDS) + list(STOP_WORDS))
+from collections import Counter
+from emfdscore.load_mfds import *
+import progressbar, time
 
-# BoW Scoring #
+#### BoW Scoring ####
 
 def tokenizer(doc):
     
-    """Performs minimal preprocessing on textual document.
+    '''Performs minimal preprocessing on textual document.
     Steps include tokenization, lower-casing, and 
     stopword/punctuation/whitespace removal. 
-    Returns list of processed tokens"""
+    Returns list of processed tokens'''
     
-    return [x.lower_ for x in doc if x.lower_ not in stopwords and not x.is_punct and not x.is_digit and not x.is_quote and not x.like_num and not x.is_space]
+    return  [x.lower_ for x in doc if x.lower_ not in stopwords and not x.is_punct and not x.is_digit and not x.is_quote and not x.like_num and not x.is_space] 
 
 
 def score_emfd(doc):
     
-    """Scores documents with the e-MFD."""
-
-    # Initiate dictionary to store scores
-    emfd_score = {k: 0 for k in probabilites+senti}
-
-    # Collect e-MFD data for all moral words in document
-    moral_words = [emfd[token] for token in doc if token in emfd.keys()]
+    '''Scores documents with the e-MFD.'''
+    
+    emfd_score = {k:0 for k in probabilites+senti}
+    moral_words = [ emfd[token] for token in doc if token in emfd.keys() ]
     
     for dic in moral_words:
         emfd_score['care_p'] += dic['care_p']
@@ -53,73 +43,51 @@ def score_emfd(doc):
         emfd_score['loyalty_sent'] += dic['loyalty_sent']
         emfd_score['authority_sent'] += dic['authority_sent']
         emfd_score['sanctity_sent'] += dic['sanctity_sent']
-
-    if len(moral_words) != 0:
-        emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
-        nonmoral_words = len(doc)-len(moral_words)
-        emfd_score['moral_nonmoral_ratio'] = len(moral_words)/nonmoral_words
-    else:
-        emfd_score = {k: 0 for k in probabilites + senti}
-        nonmoral_words = len(doc) - len(moral_words)
-        emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+    
+    emfd_score = {k:v/len(doc) for k,v in emfd_score.items()}
+    nonmoral_words = len(doc)-len(moral_words)
+    emfd_score['moral_nonmoral_ratio'] =  len(moral_words)/nonmoral_words 
     
     return emfd_score
 
 
 def score_mfd(doc):
     
-    """Scores documents with the original MFD."""
+    '''Scores documents with the original MFD.'''
     
     mfd_score = {k:0 for k in mfd_foundations}
-    moral_words = 0
-    
+    moral_words = []
     for token in doc:
         for v in mfd_regex.keys():
             if mfd_regex[v].match(token):
-                moral_words += 1
                 for f in mfd[v]:
                     mfd_score[f] += 1
-
-    if moral_words != 0:
-        mfd_score = {k: v/len(moral_words) for k, v in mfd_score.items()}
-        nonmoral_words = len(doc)-moral_words
-        mfd_score['moral_nonmoral_ratio'] = moral_words/nonmoral_words
-    else:
-        mfd_score = {k:0 for k in mfd_foundations}
-        nonmoral_words = len(doc) - moral_words
-        mfd_score['moral_nonmoral_ratio'] = moral_words / nonmoral_words
+    
+    mfd_score = {k:v/len(doc) for k,v in mfd_score.items()}
     
     return mfd_score
 
 
 def score_mfd2(doc):
     
-    """Scores documents with the MFD2."""
+    '''Scores documents with the MFD2.'''
     
     mfd2_score = {k:0 for k in mfd2_foundations}
-    moral_words = [mfd2[token]['foundation'] for token in doc if token in mfd2.keys()]
+    moral_words = [ mfd2[token]['foundation'] for token in doc if token in mfd2.keys() ]
     f_counts = Counter(moral_words)
     mfd2_score.update(f_counts)    
-
-    if len(moral_words) != 0:
-        mfd2_score = {k: v/len(moral_words) for k,v in mfd2_score.items()}
-        nonmoral_words = len(doc)-len(moral_words)
-        mfd2_score['moral_nonmoral_ratio'] = len(moral_words)/nonmoral_words
-    else:
-        mfd2_score = {k: 0 for k in mfd2_foundations}
-        nonmoral_words = len(doc) - len(moral_words)
-        mfd2_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
-
+    mfd2_score = {k:v/len(doc) for k,v in mfd2_score.items()}
+    
     return mfd2_score
 
 
 def score_docs(csv, dic_type, num_docs):
     
-    """Wrapper function that executes functions for preprocessing and dictionary scoring.
+    '''Wrapper function that executes functions for preprocessing and dictionary scoring. 
     dict_type specifies the dicitonary with which the documents should be scored.
-    Accepted values are: [emfd, mfd, mfd2]"""
+    Accepted values are: [emfd, mfd, mfd2]'''
     
-    nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
+    nlp = spacy.load('en', disable=['ner', 'parser', 'tagger'])
     nlp.add_pipe(tokenizer, name="mfd_tokenizer")
     
     if dic_type == 'emfd':
@@ -149,32 +117,21 @@ def score_docs(csv, dic_type, num_docs):
     df = pd.DataFrame(scored_docs)
     
     if dic_type == 'emfd':
-        # Calculate variance
         df['f_var'] = df[probabilites].var(axis=1)
         df['sent_var'] = df[senti].var(axis=1)
         
-    if dic_type == 'mfd' or dic_type == 'mfd2':
-        # Calculate variance
-        mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
-       'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
-       'sanctity.virtue', 'authority.vice', 'sanctity.vice']
-        
-        df['f_var'] = df[mfd_foundations].var(axis=1)
-        
     return df
 
-# PAT EXTRACTION #
-
+#### PAT EXTRACTION ####
 
 def find_ent(token, entities):
-    """High level function to match tokens to NER.
-    Do not include in nlp.pipe!"""
+    '''High level function to match tokens to NER.
+    Do not include in nlp.pipe!'''
     for k,v in entities.items():
         if token in v:
             return k
-
-
-def spacy_ner(doc):
+        
+def spaCy_NER(doc):
     include_ents = ['PERSON','NORP', 'GPE']
     entities = {ent.text:ent.text.split(' ') for ent in doc.ents if ent.label_ in include_ents}
     cc_processed = {e:{'patient_words':[], 'agent_words':[], 'attribute_words':[],
@@ -182,7 +139,6 @@ def spacy_ner(doc):
     ner_out = {'cc_processed':cc_processed, 'doc':doc, 'entities':entities}
     
     return ner_out
-
 
 def extract_dependencies(ner_out):
     doc = ner_out['doc']
@@ -259,10 +215,9 @@ def extract_dependencies(ner_out):
         
     return cc_processed
 
-
 def drop_ents(cc_processed):
     
-    """Deletes entities w/out any related words."""
+    ''' Deletes entities w/out any related words.'''
     
     empty_ents = []
     for k,v in cc_processed.items():
@@ -277,15 +232,14 @@ def drop_ents(cc_processed):
         
     return cc_processed
 
-
 def mean_pat(cc_processed):
     
-    """Calculates the average emfd scores for
+    '''Calculates the average emfd scores for 
     words in each PAT category. 
     Returns the final dataframe for each document. 
     This frame has three columns for detected  words in each PAT category and
     10 columns for each PAT category capturing the mean emfd scores.
-    """
+    '''
     
     frames = []
     for k,v in cc_processed.items():
@@ -310,15 +264,14 @@ def mean_pat(cc_processed):
     
     return pd.concat(frames)
 
-
-def pat_docs(csv,num_docs):
+def pat_docs(csv,DICT_TYPE,num_docs):
     
-    """Wrapper function that calls all individual functions
-    to execute PAT extraction"""
+    '''Wrapper function that calls all individual functions 
+    to execute PAT extraction'''
     
     # Build spaCy pipeline
-    nlp = spacy.load('en_core_web_sm')
-    nlp.add_pipe(spacy_ner, name='NER')
+    nlp = spacy.load('en')
+    nlp.add_pipe(spaCy_NER, name='NER')
     nlp.add_pipe(extract_dependencies, name='PAT extraction')
     nlp.add_pipe(drop_ents, name='drop empty entities')
     nlp.add_pipe(mean_pat, name='average PAT scores and return final df')

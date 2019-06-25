@@ -4,9 +4,9 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd 
 import argparse
-from pyamore.scoring import score_docs, pat_docs
+from emfdscore.scoring import score_docs, pat_docs
 
-parser = argparse.ArgumentParser(description='Extract moral informtion from textual documents with AMorE.')
+parser = argparse.ArgumentParser(description='Extract moral informtion from textual documents with emfdscore.')
 
 parser.add_argument('input_csv', metavar='infile', nargs='+',
                     help='Path to the CSV containing the input text. Each row in the CSV must correspond to one document text')
@@ -29,7 +29,7 @@ SCORE_METHOD = args['score_method'][0]
 csv = pd.read_csv(IN_CSV_PATH, header=None)
 num_docs = len(csv)
 
-print("❤ Running AMorE ❤")
+print("❤ Running eMFDscore ❤")
 print("Total number of input texts to be scored:", num_docs)
 
 if SCORE_METHOD == 'bow':

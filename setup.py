@@ -1,14 +1,14 @@
 from setuptools import setup
 
-setup(name='pyamore',
-      version='0.0.8',
-      description='Automated Morality Extraction (AMorE) for Python',
-      url='https://github.com/medianeuroscience/pyamore',
+setup(name='emfdscore',
+      version='0.0.1',
+      description='Extended Moral Foundation Dictionary Scoring for Python',
+      url='https://github.com/medianeuroscience/emfdscore',
       author='Anonymized.',
       author_email='fhopp@ucsb.edu',
       license='MIT',
-      packages=['pyamore'],
-      scripts=['bin/pyamore'],
+      packages=['emfdscore'],
+      scripts=['bin/emfdscore'],
       include_package_data=True, 
       install_requires=[
           'pandas',

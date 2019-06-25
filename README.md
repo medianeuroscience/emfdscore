@@ -20,7 +20,7 @@ source activate yourenvname
 Once Anaconda/Miniconda is installed and the env activated, you can install eMFDscore by copying, pasting, and executing the following command: 
 
 `
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple pyamore
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple emfdscore
 `
 
 **NOTE** The install command will be simplified after publication. 
