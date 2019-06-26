@@ -50,7 +50,7 @@ A typical command specifies the following:
 - OUTPUT.csv = Specifies the file name of the generated output csv. 
 
 Click on the below terminal for a usage demonstration.
-[![asciicast](https://asciinema.org/a/pE2VgwtS8Z3A2uUIZcuayLVWq.svg)](https://asciinema.org/a/pE2VgwtS8Z3A2uUIZcuayLVWq?autoplay=1&theme=solarized-dark)
+[![asciicast](https://asciinema.org/a/95Vr51C90rcXHeFkLLfCUOgKH.svg)](https://asciinema.org/a/95Vr51C90rcXHeFkLLfCUOgKH?autoplay=1&theme=solarized-dark&speed=2)
 
 ## Returned Metrics
 **BoW Scoring**
