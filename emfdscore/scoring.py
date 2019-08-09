@@ -57,11 +57,17 @@ def score_emfd(doc):
     if len(moral_words) != 0:
         emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
         nonmoral_words = len(doc)-len(moral_words)
-        emfd_score['moral_nonmoral_ratio'] = len(moral_words)/nonmoral_words
+        try:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
     else:
         emfd_score = {k: 0 for k in probabilites + senti}
         nonmoral_words = len(doc) - len(moral_words)
-        emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        try:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
     
     return emfd_score
 
@@ -83,11 +89,17 @@ def score_mfd(doc):
     if moral_words != 0:
         mfd_score = {k: v/len(moral_words) for k, v in mfd_score.items()}
         nonmoral_words = len(doc)-moral_words
-        mfd_score['moral_nonmoral_ratio'] = moral_words/nonmoral_words
+        try:
+            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
     else:
         mfd_score = {k:0 for k in mfd_foundations}
         nonmoral_words = len(doc) - moral_words
-        mfd_score['moral_nonmoral_ratio'] = moral_words / nonmoral_words
+        try:
+            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
     
     return mfd_score
 
@@ -104,11 +116,17 @@ def score_mfd2(doc):
     if len(moral_words) != 0:
         mfd2_score = {k: v/len(moral_words) for k,v in mfd2_score.items()}
         nonmoral_words = len(doc)-len(moral_words)
-        mfd2_score['moral_nonmoral_ratio'] = len(moral_words)/nonmoral_words
+        try:
+            mfd2_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            mfd2_score['moral_nonmoral_ratio'] = len(moral_words) / 1
     else:
         mfd2_score = {k: 0 for k in mfd2_foundations}
         nonmoral_words = len(doc) - len(moral_words)
-        mfd2_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        try:
+            mfd2_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            mfd2_score['moral_nonmoral_ratio'] = len(moral_words) / 1
 
     return mfd2_score
 
