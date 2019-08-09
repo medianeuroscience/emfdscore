@@ -23,6 +23,12 @@ Once Anaconda/Miniconda is installed and the env activated, you can install eMFD
 pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple emfdscore
 `
 
+If you are interested in working from the bleeding edge, you can install `eMFDScore` directly from github using the following command. 
+
+`
+pip install https://github.com/medianeuroscience/emfdscore/archive/master.zip
+`
+
 **NOTE** The install command will be simplified after publication. 
 
 After installing eMFDscore, please install the latest version of spaCy by running the following two commands in your terminal:
