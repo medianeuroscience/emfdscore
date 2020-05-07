@@ -159,8 +159,6 @@ def score_docs(csv, dic_type, score_type,num_docs):
             emfd_score = {k: 0 for k in probabilites+senti}
 
             # Collect e-MFD data for all moral words in document
-            moral_words = [emfd[token] for token in doc if token in emfd.keys()]
-    
             for dic in moral_words:
                 emfd_score['care_p'] += dic['care_p']
                 emfd_score['fairness_p'] += dic['fairness_p']
