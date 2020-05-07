@@ -176,7 +176,7 @@ def score_docs(csv, dic_type, score_type,num_docs):
             emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
             emfd_score['cnt'] = len(moral_words)
             df = pd.DataFrame(pd.Series(emfd_score)).T
-            df = df[['cnt']+probabilities+sent]
+            df = df[['cnt']+probabilites+sent]
             return df
 
     nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
