@@ -131,12 +131,56 @@ def score_mfd2(doc):
     return mfd2_score
 
 
-def score_docs(csv, dic_type, num_docs):
+def score_docs(csv, dic_type, score_type,num_docs):
     
     """Wrapper function that executes functions for preprocessing and dictionary scoring.
     dict_type specifies the dicitonary with which the documents should be scored.
     Accepted values are: [emfd, mfd, mfd2]"""
+
+    if score_type == 'wordlist':
+        widgets = [
+            'Processed: ', progressbar.Counter(),
+            ' ', progressbar.Percentage(),
+            ' ', progressbar.Bar(marker='❤'),
+            ' ', progressbar.Timer(),
+            ' ', progressbar.ETA(),
+        ]
+
+        with progressbar.ProgressBar(max_value=num_docs, widgets=widgets) as bar:
+            moral_words = []
+            for i, row in csv[0].iteritems():
+                if row in emfd.keys():
+                    moral_words.append(emfd[row])
+                else:
+                    bar.update(i)
+                    continue
+        
+
+            emfd_score = {k: 0 for k in probabilites+senti}
+
+            # Collect e-MFD data for all moral words in document
+            moral_words = [emfd[token] for token in doc if token in emfd.keys()]
     
+            for dic in moral_words:
+                emfd_score['care_p'] += dic['care_p']
+                emfd_score['fairness_p'] += dic['fairness_p']
+                emfd_score['loyalty_p'] += dic['loyalty_p']
+                emfd_score['authority_p'] += dic['authority_p']
+                emfd_score['sanctity_p'] += dic['sanctity_p']
+        
+                emfd_score['care_sent'] += dic['care_sent']
+                emfd_score['fairness_sent'] += dic['fairness_sent']
+                emfd_score['loyalty_sent'] += dic['loyalty_sent']
+                emfd_score['authority_sent'] += dic['authority_sent']
+                emfd_score['sanctity_sent'] += dic['sanctity_sent']
+                bar.update(i)
+
+            emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
+            emfd_score['cnt'] = len(moral_words)
+            df = pd.DataFrame(emfd_score)
+            df = df[['cnt']+probabilities+sent]
+            return df
+
     nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
     nlp.add_pipe(tokenizer, name="mfd_tokenizer")
     
@@ -149,7 +193,7 @@ def score_docs(csv, dic_type, num_docs):
     else:
         print('Dictionary type not recognized. Available values are: emfd, mfd, mfd2')
         return 
-    
+
     scored_docs = []
     widgets = [
         'Processed: ', progressbar.Counter(),
@@ -159,6 +203,7 @@ def score_docs(csv, dic_type, num_docs):
         ' ', progressbar.ETA(),
     ]
 
+    
     with progressbar.ProgressBar(max_value=num_docs, widgets=widgets) as bar:
         for i, row in csv[0].iteritems():
             scored_docs.append(nlp(row))

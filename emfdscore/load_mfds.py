@@ -1,7 +1,7 @@
 import re, fnmatch
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
-from pandas import DataFrame, read_pickle
+from pandas import DataFrame, read_pickle,read_csv
 import os
 
 
@@ -10,7 +10,7 @@ fileDir = os.path.dirname(os.path.abspath(__file__))
 
 
 # Load E-MFD
-emfd = read_pickle(fileDir+'/dictionaries/emfd_scoring.pkl')
+emfd = read_csv(fileDir+'/dictionaries/emfd_scoring.pkl',index_col='word')
 probabilites = [c for c in emfd.columns if c.endswith('_p')]
 foundations = ['care','fairness','loyalty','authority','sanctity']
 senti = [c for c in emfd.columns if c.endswith('_sent')]

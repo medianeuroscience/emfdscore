@@ -13,7 +13,7 @@ parser.add_argument('dict_type', metavar='dict_version', nargs='+', type=str, de
                     help='Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
 
 parser.add_argument('score_method', metavar='scoring_method', nargs='+', type=str, default='bow',
-                    help='Dictionary for scoring. Possible values are: bow, pat')
+                    help='Dictionary for scoring. Possible values are: bow, wordlist, pat')
 
 parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str,
                     help='The path/name for the scored output CSV.')
@@ -31,9 +31,13 @@ print("❤ Running eMFDscore ❤")
 print("Total number of input texts to be scored:", num_docs)
 
 if SCORE_METHOD == 'bow':
-    df = score_docs(csv,DICT_TYPE,num_docs)
+    df = score_docs(csv,DICT_TYPE,SCORE_METHOD,num_docs)
     df.to_csv(OUT_CSV_PATH, index=False)
-    
+
+if SCORE_METHOD == 'wordlist':
+    df = score_docs(csv,DICT_TYPE,SCORE_METHOD,num_docs)
+    df.to_csv(OUT_CSV_PATH, index=False)
+
 if SCORE_METHOD == 'pat':
     df = pat_docs(csv,num_docs)
     df.to_csv(OUT_CSV_PATH, index=False)
