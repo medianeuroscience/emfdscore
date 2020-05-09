@@ -8,23 +8,26 @@ When using eMFDscore, please consider giving this repository a star (top right c
 ## Install 
 eMFDscore requires a Python installation (v3.5+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS.
 
-For best practises, we recommend installing eMFDscore into a virtual conda environment:
-`
+For best practises, we recommend installing eMFDscore into a virtual conda environment. Hence, you should first create a virtual environment by executing the following command in your terminal:
+
+```
 $ conda create -n yourenvname python=3.7
-`
+```
 
-`
+Once Anaconda/Miniconda is installed activate the env via:
+
+```
 $ source activate yourenvname
-`
+```
 
-Once Anaconda/Miniconda is installed and the env activated, you must install spaCy, which is the main natural language processing backend that eMFDscore is built on:
+Next, you must install spaCy, which is the main natural language processing backend that eMFDscore is built on:
 
 ```
 $ conda install -c conda-forge spacy
 $ python -m spacy download en_core_web_sm
 ``` 
 
-Next, you can install eMFDscore by copying, pasting, and executing the following command: 
+Finally, you can install eMFDscore by copying, pasting, and executing the following command: 
 
 `
 pip install https://github.com/medianeuroscience/emfdscore/archive/master.zip
