@@ -179,6 +179,50 @@ def score_docs(csv, dic_type, score_type,num_docs):
             df = df[['cnt']+probabilites+senti]
             return df
 
+    if score_type == 'gdelt.ngrams':
+        widgets = [
+            'Processed: ', progressbar.Counter(),
+            ' ', progressbar.Percentage(),
+            ' ', progressbar.Bar(marker='❤'),
+            ' ', progressbar.Timer(),
+            ' ', progressbar.ETA(),
+        ]
+
+        with progressbar.ProgressBar(max_value=num_docs, widgets=widgets) as bar:
+            moral_words = []
+            word_frequncies = []
+            for i, row in csv.iterrows():
+                if row['word'] in emfd.keys():
+                    moral_words.append( {'scores':emfd[row['word']], 'freq': row['freq']} )
+                    word_frequncies.append(int(row['freq']))
+                else:
+                    bar.update(i)
+                    continue
+        
+
+            emfd_score = {k: 0 for k in probabilites+senti}
+
+            # Collect e-MFD data for all moral words in document
+            for dic in moral_words:
+                emfd_score['care_p'] += (dic['scores']['care_p'] * dic['freq'])
+                emfd_score['fairness_p'] += (dic['scores']['fairness_p'] * dic['freq'])
+                emfd_score['loyalty_p'] += (dic['scores']['loyalty_p'] * dic['freq'])
+                emfd_score['authority_p'] += (dic['scores']['authority_p'] * dic['freq'])
+                emfd_score['sanctity_p'] += (dic['scores']['sanctity_p'] * dic['freq'])
+        
+                emfd_score['care_sent'] += (dic['scores']['care_sent'] * dic['freq'])
+                emfd_score['fairness_sent'] += (dic['scores']['fairness_sent'] * dic['freq'])
+                emfd_score['loyalty_sent'] += (dic['scores']['loyalty_sent'] * dic['freq'])
+                emfd_score['authority_sent'] += (dic['scores']['authority_sent'] * dic['freq'])
+                emfd_score['sanctity_sent'] += (dic['scores']['sanctity_sent'] * dic['freq'])
+                bar.update(i)
+
+            emfd_score = {k: v/sum(word_frequncies) for k, v in emfd_score.items()}
+            emfd_score['cnt'] = sum(word_frequncies)
+            df = pd.DataFrame(pd.Series(emfd_score)).T
+            df = df[['cnt']+probabilites+senti]
+            return df
+
     nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
     nlp.add_pipe(tokenizer, name="mfd_tokenizer")
     
