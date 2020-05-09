@@ -11,13 +11,13 @@ eMFDscore requires a Python installation (v3.5+). If your machine does not have 
 For best practises, we recommend installing eMFDscore into a virtual conda environment. Hence, you should first create a virtual environment by executing the following command in your terminal:
 
 ```
-$ conda create -n yourenvname python=3.7
+$ conda create -n emfd python=3.7
 ```
 
 Once Anaconda/Miniconda is installed activate the env via:
 
 ```
-$ source activate yourenvname
+$ source activate emfd
 ```
 
 Next, you must install spaCy, which is the main natural language processing backend that eMFDscore is built on:
