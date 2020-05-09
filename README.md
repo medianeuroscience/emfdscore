@@ -51,6 +51,8 @@ A typical command specifies the following:
     - `pat` relies on named entity recognition and syntactic dependency parsing. For each document, the algorithm first extracts all mentioned entities. Next, for each entitiy, eMFDscore extracts words that pertain to 1) moral verbs for which the entity is an agent argument (Agent verbs), 2) moral verbs for which the entity is the patient, theme, or other argument (Patient verbs), and other moral attributes (i.e., adjectival modifiers, appositives, etc.).  
 
     - `wordlist` is a simple scoring algorithm that lets users examine the moral content of individual words. This scoring method expects a CSV where each row corresponds to a unique word. **Note**: The `wordlist` scoring algorithm does not perform any tokenization or preprocessing on the wordlists. For a more fine-grained moral content extraction, users are encouraged to use either the `bow` or `path` methodology. Furthermore, only the emfd is currenlty supported for PAT extraction. Additionally, this method is more computationally expensive and thus has a longer execution time. 
+    
+    - 'gdelt.ngrams' is designed for the [Global Database of Events, Language, and Tone](https://blog.gdeltproject.org/announcing-the-television-news-ngram-datasets-tv-ngram/) Television Ngram dataset. This scoring method expects a unigram (1gram) input text file from GDELT and will score each unprocessed (untokenized) unigram with the eMFD. 
 
 - OUTPUT.csv = Specifies the file name of the generated output csv. 
 
