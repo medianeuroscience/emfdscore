@@ -47,6 +47,7 @@ if SCORE_METHOD == 'bow':
     df.to_csv(OUT_CSV_PATH, index=False)
     
 if SCORE_METHOD == 'bow-wta':
+    print('Recognized wta.')
     df = score_docs(csv,DICT_TYPE,SCORE_METHOD,num_docs)
     df.to_csv(OUT_CSV_PATH, index=False)
 

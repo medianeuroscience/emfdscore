@@ -74,6 +74,8 @@ def score_emfd(doc):
 
 def score_emfd_wta(doc):
     
+    print('starting emfd_wta function.')
+    
     """Scores documents with the e-MFD where every word is assigned one vice/virtue foundation and score 
     according to the foundation with the highest probability."""
 
@@ -261,7 +263,8 @@ def score_docs(csv, dic_type, score_type,num_docs):
     
     if dic_type == 'emfd' and score_type == 'bow-wta':
         nlp.add_pipe(score_emfd_wta, name="score_emfd_wta", last=True)
-    elif dic_type == 'emfd':
+    
+    if dic_type == 'emfd' and score_type != 'bow-wta':
         nlp.add_pipe(score_emfd, name="score_emfd", last=True)
     elif dic_type == 'mfd':
         nlp.add_pipe(score_mfd, name="score_mfd", last=True)
