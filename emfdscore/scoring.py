@@ -261,12 +261,10 @@ def score_docs(csv, dic_type, score_type,num_docs):
     nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
     nlp.add_pipe(tokenizer, name="mfd_tokenizer")
     
-    if dic_type == 'emfd' and score_type == 'bow.wta':
-        print('Here!')
-        nlp.add_pipe(score_emfd_wta, name="score_emfd_wta", last=True)
-    
-    if dic_type == 'emfd' and score_type != 'bow.wta':
-        nlp.add_pipe(score_emfd, name="score_emfd", last=True)
+    if dic_type == 'emfd':
+        nlp.add_pipe(score_emfd, name="score_emfd_wta", last=True)
+    elif dic_type == 'emfd.wta':
+        nlp.add_pipe(score_emfd_wta, name="score_emfd", last=True)
     elif dic_type == 'mfd':
         nlp.add_pipe(score_mfd, name="score_mfd", last=True)
     elif dic_type == 'mfd2':
@@ -292,12 +290,12 @@ def score_docs(csv, dic_type, score_type,num_docs):
 
     df = pd.DataFrame(scored_docs)
     
-    if dic_type == 'emfd' and not score_type=='bow-wta':
+    if dic_type == 'emfd':
         # Calculate variance
         df['f_var'] = df[probabilites].var(axis=1)
         df['sent_var'] = df[senti].var(axis=1)
         
-    if dic_type == 'emfd' and score_type=='bow-wta':
+    if dic_type == 'emfd.wta':
         # Calculate variance
         mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
        'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
