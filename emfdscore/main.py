@@ -13,7 +13,7 @@ parser.add_argument('dict_type', metavar='dict_version', nargs='+', type=str, de
                     help='Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
 
 parser.add_argument('score_method', metavar='scoring_method', nargs='+', type=str, default='bow',
-                    help='Dictionary for scoring. Possible values are: bow, wordlist, gdelt.ngrams, pat')
+                    help='Dictionary for scoring. Possible values are: bow, bow-wta, wordlist, gdelt.ngrams, pat')
 
 parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str,
                     help='The path/name for the scored output CSV.')
@@ -39,10 +39,14 @@ elif infile_type == 'txt':
 else:
     print('Input file type not recognized! Must either be CSV for scoring method bow, wordlist, and pat, or TXT for gdelt.ngram')
 
-print("❤ Running eMFDscore ❤")
+print("Running eMFDscore")
 print("Total number of input texts to be scored:", num_docs)
 
 if SCORE_METHOD == 'bow':
+    df = score_docs(csv,DICT_TYPE,SCORE_METHOD,num_docs)
+    df.to_csv(OUT_CSV_PATH, index=False)
+    
+if SCORE_METHOD == 'bow-wta':
     df = score_docs(csv,DICT_TYPE,SCORE_METHOD,num_docs)
     df.to_csv(OUT_CSV_PATH, index=False)
 

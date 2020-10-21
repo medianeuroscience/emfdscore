@@ -16,6 +16,9 @@ foundations = ['care','fairness','loyalty','authority','sanctity']
 senti = [c for c in emfd.columns if c.endswith('_sent')]
 emfd = emfd.T.to_dict()
 
+# Load E-MFD_WTA
+emfd_wta = read_pickle(fileDir+'/dictionaries/emfd_wta.pkl')
+
 # Load MFD
 MFD = fileDir+'/dictionaries/mft_original.dic'
 nummap = dict()

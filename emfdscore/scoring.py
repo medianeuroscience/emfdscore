@@ -72,6 +72,38 @@ def score_emfd(doc):
     return emfd_score
 
 
+def score_emfd_wta(doc):
+    
+    """Scores documents with the e-MFD where every word is assigned one vice/virtue foundation and score 
+    according to the foundation with the highest probability."""
+
+    # Initiate dictionary to store scores
+    emfd_score = {k:0 for k in mfd_foundations}
+
+    # Collect e-MFD data for all moral words in document
+    moral_words = [emfd_wta[token] for token in doc if token in emfd_wta.keys()]
+    
+    for dic in moral_words:
+        emfd_score[dic['foundation']] += dic['score']
+
+    if len(moral_words) != 0:
+        emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
+        nonmoral_words = len(doc)-len(moral_words)
+        try:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
+    else:
+        emfd_score = {k: 0 for k in probabilites + senti}
+        nonmoral_words = len(doc) - len(moral_words)
+        try:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+        except ZeroDivisionError:
+            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
+    
+    return emfd_score
+
+
 def score_mfd(doc):
     
     """Scores documents with the original MFD."""
@@ -226,7 +258,9 @@ def score_docs(csv, dic_type, score_type,num_docs):
     nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
     nlp.add_pipe(tokenizer, name="mfd_tokenizer")
     
-    if dic_type == 'emfd':
+    if dic_type == 'emfd' and score_type == 'bow-wta':
+        nlp.add_pipe(score_emfd_wta, name="score_emfd_wta", last=True)
+    elif dic_type == 'emfd':
         nlp.add_pipe(score_emfd, name="score_emfd", last=True)
     elif dic_type == 'mfd':
         nlp.add_pipe(score_mfd, name="score_mfd", last=True)
@@ -253,10 +287,17 @@ def score_docs(csv, dic_type, score_type,num_docs):
 
     df = pd.DataFrame(scored_docs)
     
-    if dic_type == 'emfd':
+    if dic_type == 'emfd' and not score_type=='bow-wta':
         # Calculate variance
         df['f_var'] = df[probabilites].var(axis=1)
         df['sent_var'] = df[senti].var(axis=1)
+        
+    if dic_type == 'emfd' and score_type=='bow-wta':
+        # Calculate variance
+        mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
+       'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
+       'sanctity.virtue', 'authority.vice', 'sanctity.vice']
+        df['f_var'] = df[mfd_foundations].var(axis=1)
         
     if dic_type == 'mfd' or dic_type == 'mfd2':
         # Calculate variance
