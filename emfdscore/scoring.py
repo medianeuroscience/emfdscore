@@ -84,7 +84,6 @@ def score_emfd_wta(doc):
 
     # Collect e-MFD data for all moral words in document
     moral_words = [emfd_wta[token] for token in doc if token in emfd_wta.keys()]
-    print(moral_words)
     
     for dic in moral_words:
         emfd_score[dic['foundation']] += dic['score']
@@ -301,6 +300,7 @@ def score_docs(csv, dic_type, score_type,num_docs):
        'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
        'sanctity.virtue', 'authority.vice', 'sanctity.vice']
         df['f_var'] = df[mfd_foundations].var(axis=1)
+        del df['moral']
         
     if dic_type == 'mfd' or dic_type == 'mfd2':
         # Calculate variance
