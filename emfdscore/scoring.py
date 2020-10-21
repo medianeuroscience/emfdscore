@@ -74,8 +74,6 @@ def score_emfd(doc):
 
 def score_emfd_wta(doc):
     
-    print('starting emfd_wta function.')
-    
     """Scores documents with the e-MFD where every word is assigned one vice/virtue foundation and score 
     according to the foundation with the highest probability."""
 
