@@ -261,10 +261,11 @@ def score_docs(csv, dic_type, score_type,num_docs):
     nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
     nlp.add_pipe(tokenizer, name="mfd_tokenizer")
     
-    if dic_type == 'emfd' and score_type == 'bow-wta':
+    if dic_type == 'emfd' and score_type == 'bow.wta':
+        print('Here!')
         nlp.add_pipe(score_emfd_wta, name="score_emfd_wta", last=True)
     
-    if dic_type == 'emfd' and score_type != 'bow-wta':
+    if dic_type == 'emfd' and score_type != 'bow.wta':
         nlp.add_pipe(score_emfd, name="score_emfd", last=True)
     elif dic_type == 'mfd':
         nlp.add_pipe(score_mfd, name="score_mfd", last=True)
