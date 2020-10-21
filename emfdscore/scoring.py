@@ -82,6 +82,7 @@ def score_emfd_wta(doc):
 
     # Collect e-MFD data for all moral words in document
     moral_words = [emfd_wta[token] for token in doc if token in emfd_wta.keys()]
+    print(moral_words)
     
     for dic in moral_words:
         emfd_score[dic['foundation']] += dic['score']
