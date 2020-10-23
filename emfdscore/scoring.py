@@ -376,7 +376,6 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
                                'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
                                'sanctity.virtue', 'authority.vice', 'sanctity.vice']
             df['f_var'] = df[mfd_foundations].var(axis=1)
-            del df['moral']
             
     if dic_type == 'mfd' or dic_type == 'mfd2':
         # Calculate variance
