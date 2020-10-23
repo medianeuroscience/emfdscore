@@ -117,8 +117,9 @@ def score_emfd_all_vice_virtue(doc):
     moral_words = [emfd_all_vice_virtue[token] for token in doc if token in emfd_all_vice_virtue.keys()]
     
     for dic in moral_words:
-        for f in mfd_foundations if f != 'moral':
-            emfd_score[f] += dic[f]
+        for f in mfd_foundations:
+            if f != 'moral':
+                emfd_score[f] += dic[f]
         
     if len(moral_words) != 0:
         emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
