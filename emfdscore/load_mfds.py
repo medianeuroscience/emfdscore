@@ -16,8 +16,14 @@ foundations = ['care','fairness','loyalty','authority','sanctity']
 senti = [c for c in emfd.columns if c.endswith('_sent')]
 emfd = emfd.T.to_dict()
 
-# Load E-MFD_WTA
-emfd_wta = read_pickle(fileDir+'/dictionaries/emfd_wta.pkl')
+# Load eMFD-all-vice-virtue
+emfd_all_vice_virtue = read_pickle(fileDir+'/dictionaries/emfd_all_vice_virtue.pkl')
+
+# Load eMFD-single-vice-virtue
+emfd_single_vice_virtue = read_pickle(fileDir+'/dictionaries/emfd_single_vice_virtue.pkl')
+
+# Load eMFD-single-sent
+emfd_single_sent = read_pickle(fileDir+'/dictionaries/emfd_single_sent.pkl')
 
 # Load MFD
 MFD = fileDir+'/dictionaries/mft_original.dic'
