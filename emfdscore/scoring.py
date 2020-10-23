@@ -117,7 +117,7 @@ def score_emfd_all_vice_virtue(doc):
     moral_words = [emfd_all_vice_virtue[token] for token in doc if token in emfd_all_vice_virtue.keys()]
     
     for dic in moral_words:
-        for f in mfd_foundations:
+        for f in mfd_foundations if f != 'moral':
             emfd_score[f] += dic[f]
         
     if len(moral_words) != 0:
@@ -143,7 +143,7 @@ def score_emfd_single_vice_virtue(doc):
     """Scores documents with the eMFD, where each word is assigned one vice-virtue score."""
 
     # Initiate dictionary to store scores
-    emfd_score = {k:0 for k in mfd_foundations}
+    emfd_score = {k:0 for k in mfd_foundations if k !='moral'}
 
     # Collect e-MFD data for all moral words in document
     moral_words = [emfd_single_vice_virtue[token] for token in doc if token in emfd_single_vice_virtue.keys()]
@@ -358,18 +358,23 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
     df = pd.DataFrame(scored_docs)
     
     if dic_type == 'emfd':
-        # Calculate variance
-        df['f_var'] = df[probabilites].var(axis=1)
-        df['sent_var'] = df[senti].var(axis=1)
-        
-    if dic_type == 'emfd.wta':
-        # Calculate variance
-        mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
-       'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
-       'sanctity.virtue', 'authority.vice', 'sanctity.vice']
-        df['f_var'] = df[mfd_foundations].var(axis=1)
-        del df['moral']
-        
+        if prob_map == 'all' and out_metrics == 'sentiment':
+            df['f_var'] = df[probabilites].var(axis=1)
+            df['sent_var'] = df[senti].var(axis=1)
+        elif prob_map == 'single' and out_metrics == 'sentiment':
+            df['f_var'] = df[probabilites].var(axis=1)
+            df['sent_var'] = df[senti].var(axis=1)
+        elif prob_map == 'all' and out_metrics == 'vice-virtue':
+            mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
+                               'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
+                               'sanctity.virtue', 'authority.vice', 'sanctity.vice']
+            df['f_var'] = df[mfd_foundations].var(axis=1)
+        elif prob_map == 'single' and out_metrics == 'vice-virtue':
+            mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
+                               'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
+                               'sanctity.virtue', 'authority.vice', 'sanctity.vice']
+            df['f_var'] = df[mfd_foundations].var(axis=1)
+            
     if dic_type == 'mfd' or dic_type == 'mfd2':
         # Calculate variance
         mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
