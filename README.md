@@ -45,7 +45,12 @@ A typical command specifies the following:
 
 - INPUT.CSV = The path to a CSV in which the first column contains the document texts to be scored. Each row should reflect its own document. See the [template_input.csv](https://github.com/medianeuroscience/emfdscore/blob/master/emfdscore/template_input.csv) for an example file format.
 
-- DICT_TYPE = Declares which MFD is applied to score documents. In its current version, eMFDscore lets users choose between three dictionaries: `emfd` = extended Moral Foundations Dictionary (eMFD; under review); `mfd2` = Moral Foundations Dicitonary 2.0 (Frimer et al., 2017; https://osf.io/xakyw/ ); `mfd` = original Moral Foundations Dictionary (https://moralfoundations.org/othermaterials) 
+- DICT_TYPE = Declares which MFD is applied to score documents. In its current version, eMFDscore lets users choose between three dictionaries: 
+
+    -   `emfd` = extended Moral Foundations Dictionary (eMFD)
+    - `emfd.wta` = extended Moral Foundations Dictionary (eMFD) where every word is assigned **one** vice/virtue score according to the foundation with the highest probability
+    - `mfd2` = Moral Foundations Dicitonary 2.0 (Frimer et al., 2017; https://osf.io/xakyw/ )
+    - `mfd` = original Moral Foundations Dictionary (https://moralfoundations.org/othermaterials) 
 
 - SCORING_METHOD = Currently, eMFDscore employs three different scoring algorithms:   
 
