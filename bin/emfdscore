@@ -9,7 +9,7 @@ from emfdscore.scoring import score_docs, pat_docs
 parser = argparse.ArgumentParser(description='Extract moral informtion from textual documents with emfdscore.')
 
 # Define Input Document
-parser.add_argument('input_csv', metavar='infile', nargs='+', required=True, 
+parser.add_argument('input_csv', metavar='infile', nargs='+',
                     help='Path to the CSV containing the input text. Each row in the CSV must correspond to one document text')
                     
 # Subparser for Dictionary Options
@@ -24,11 +24,11 @@ emfd_parser.add_argument('output_metrics', choices=['sentiment','vice-virtue'], 
 
              
 # Document Scoring Method
-parser.add_argument('score_method', metavar='scoring_method', nargs='+', type=str, default='bow', required=True, 
+parser.add_argument('score_method', metavar='scoring_method', nargs='+', type=str, default='bow', 
                     help='Text scoring method. Possible values are: bow, wordlist, gdelt.ngrams, pat')
 
 # Output file path 
-parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str, required=True, 
+parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str,  
                     help='The path/name for the scored output CSV.')
                     
 args = vars(parser.parse_args())
