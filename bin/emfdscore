@@ -8,31 +8,48 @@ from emfdscore.scoring import score_docs, pat_docs
 
 parser = argparse.ArgumentParser(description='Extract moral informtion from textual documents with emfdscore.')
 
-parser.add_argument('input_csv', metavar='infile', nargs='+',
+# Define Input Document
+parser.add_argument('input_csv', metavar='infile', nargs='+', required=True, 
                     help='Path to the CSV containing the input text. Each row in the CSV must correspond to one document text')
-
-parser.add_argument('dict_type', metavar='dict_version', nargs='+', type=str, default='emfd',
-                    help='Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
                     
-parser.add_argument('prob_map', metavar='prob_map', nargs='+', type=str, default='all',
+# Subparser for Dictionary Options
+subparsers = parser.add_subparsers('dict_type', dest='subcommand', required=True, meta_var='dict_type',
+help=Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
+
+emfd_parser = subparsers.add_parser('emfd')
+
+emfd_parser.add_argument('prob_map', choices=['all','single'], default='all', metavar='prob_map', nargs='+', type=str, 
                     help='eMFD only. Assigns either five moral probabilities (all) or only the highest probability (single) to each word. Possible values are: all, single')
 
-parser.add_argument('score_method', metavar='scoring_method', nargs='+', type=str, default='bow',
+emfd_parser.add_argument('output_metrics', choices=['sentiment','vice-virtue'], default='sentiment', metavar='output_metrics', nargs='+', type=str, 
+                    help='eMFD only. Either returns an average sentiment score for each foundation (sentiment) or splits each foundation into a vice/virtue category (vice-virtue). 
+                    Possible values are: sentiment, vice-virtue')                    
+
+             
+# Document Scoring Method
+parser.add_argument('score_method', metavar='scoring_method', nargs='+', type=str, default='bow', required=True, 
                     help='Text scoring method. Possible values are: bow, wordlist, gdelt.ngrams, pat')
-                    
-parser.add_argument('output_metrics', metavar='output_metrics', nargs='+', type=str, default='sentiment',
-                    help='eMFD only. Either returns an average sentiment score for each foundation (sentiment) or splits each foundation into a vice/virtue category (vice-virtue). Possible values are: sentiment, vice-virtue')
 
-parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str,
+# Output file path 
+parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str, required=True, 
                     help='The path/name for the scored output CSV.')
-
+                    
 args = vars(parser.parse_args())
 IN_CSV_PATH = args['input_csv'][0]
-DICT_TYPE = args['dict_type'][0]
-PROB_MAP = args['prob_map'][0]
+DICT_TYPE = args.subcommand
 SCORE_METHOD = args['score_method'][0]
-OUT_METRICS = args['output_metrics'][0]
 OUT_CSV_PATH = args['output_csv'][0]
+
+if args.subcommand == 'emfd':
+    PROB_MAP = args.prob_map
+    OUT_METRICS = args.output_metrics
+
+elif args.subcommand == 'mfd' or args.subcommand == 'mfd2'
+    PROB_MAP = ''
+    OUT_METRICS = ''
+else:
+    print('Error! Please specify one of the following dictionaries: emfd, mfd, mfd2.')
+
 
 infile_type = IN_CSV_PATH.split('.')[-1]
 
