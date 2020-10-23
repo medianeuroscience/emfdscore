@@ -21,8 +21,7 @@ parser.add_argument('score_method', metavar='scoring_method', nargs='+', type=st
                     help='Text scoring method. Possible values are: bow, wordlist, gdelt.ngrams, pat')
                     
 parser.add_argument('output_metrics', metavar='output_metrics', nargs='+', type=str, default='sentiment',
-                    help='eMFD only. Either returns an average sentiment score for each foundation (sentiment) or splits each foundation into a vice/virtue category (vice-virtue).'
-                    Possible values are: sentiment, vice-virtue')
+                    help='eMFD only. Either returns an average sentiment score for each foundation (sentiment) or splits each foundation into a vice/virtue category (vice-virtue). Possible values are: sentiment, vice-virtue')
 
 parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str,
                     help='The path/name for the scored output CSV.')
