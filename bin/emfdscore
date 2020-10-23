@@ -41,7 +41,7 @@ if args.subcommand == 'emfd':
     PROB_MAP = args.prob_map
     OUT_METRICS = args.output_metrics
 
-elif args.subcommand == 'mfd' or args.subcommand == 'mfd2'
+elif args.subcommand == 'mfd' or args.subcommand == 'mfd2':
     PROB_MAP = ''
     OUT_METRICS = ''
 else:
