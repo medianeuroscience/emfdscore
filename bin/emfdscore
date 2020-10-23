@@ -13,7 +13,7 @@ parser.add_argument('input_csv', metavar='infile', nargs='+',
                     help='Path to the CSV containing the input text. Each row in the CSV must correspond to one document text')
                     
 # Subparser for Dictionary Options
-subparsers = parser.add_subparsers(dest='dict_type', help='Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
+subparsers = parser.add_subparsers(dest='dict_type', required=True, help='Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
 
 emfd_parser = subparsers.add_parser('emfd')
 
