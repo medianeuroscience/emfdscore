@@ -13,7 +13,7 @@ parser.add_argument('input_csv', metavar='infile', nargs='+',
                     help='Path to the CSV containing the input text. Each row in the CSV must correspond to one document text')
                     
 # Subparser for Dictionary Options
-subparsers = parser.add_subparsers('dict_type', dest='subcommand', required=True, meta_var='dict_type', help='Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
+subparsers = parser.add_subparsers(dest='dict_type', help='Dictionary for scoring. Possible values are: emfd, mfd, mfd2')
 
 emfd_parser = subparsers.add_parser('emfd')
 
@@ -33,15 +33,15 @@ parser.add_argument('output_csv', metavar='outfile', nargs='+', type=str,
                     
 args = vars(parser.parse_args())
 IN_CSV_PATH = args['input_csv'][0]
-DICT_TYPE = args.subcommand
+DICT_TYPE = args.dict_type
 SCORE_METHOD = args['score_method'][0]
 OUT_CSV_PATH = args['output_csv'][0]
 
-if args.subcommand == 'emfd':
+if args.dict_type == 'emfd':
     PROB_MAP = args.prob_map
     OUT_METRICS = args.output_metrics
 
-elif args.subcommand == 'mfd' or args.subcommand == 'mfd2':
+elif args.dict_type == 'mfd' or args.subcommand == 'mfd2':
     PROB_MAP = ''
     OUT_METRICS = ''
 else:
