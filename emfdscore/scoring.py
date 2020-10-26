@@ -384,7 +384,7 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
         mfd_foundations = ['care.virtue', 'fairness.virtue', 'loyalty.virtue',
                    'authority.virtue','sanctity.virtue',
                    'care.vice','fairness.vice','loyalty.vice',
-                   'authority.vice','sanctity.vice','moral']
+                   'authority.vice','sanctity.vice']
         
         df['f_var'] = df[mfd_foundations].var(axis=1)
         
