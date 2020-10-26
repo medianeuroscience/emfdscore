@@ -185,19 +185,19 @@ def score_mfd(doc):
                     mfd_score[f] += 1
 
     if moral_words != 0:
-        mfd_score = {k: v/len(moral_words) for k, v in mfd_score.items()}
+        mfd_score = {k: v/moral_words for k, v in mfd_score.items()}
         nonmoral_words = len(doc)-moral_words
         try:
-            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+            mfd_score['moral_nonmoral_ratio'] = moral_words / nonmoral_words
         except ZeroDivisionError:
-            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
+            mfd_score['moral_nonmoral_ratio'] = moral_words / 1
     else:
         mfd_score = {k:0 for k in mfd_foundations}
         nonmoral_words = len(doc) - moral_words
         try:
-            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+            mfd_score['moral_nonmoral_ratio'] = moral_words / nonmoral_words
         except ZeroDivisionError:
-            mfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
+            mfd_score['moral_nonmoral_ratio'] = moral_words / 1
     
     return mfd_score
 
@@ -366,22 +366,25 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
             df['f_var'] = df[probabilites].var(axis=1)
             df['sent_var'] = df[senti].var(axis=1)
         elif prob_map == 'all' and out_metrics == 'vice-virtue':
-            mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
-                               'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
-                               'sanctity.virtue', 'authority.vice', 'sanctity.vice']
+            mfd_foundations = ['care.virtue', 'fairness.virtue', 'loyalty.virtue',
+                   'authority.virtue','sanctity.virtue',
+                   'care.vice','fairness.vice','loyalty.vice',
+                   'authority.vice','sanctity.vice']
             df['f_var'] = df[mfd_foundations].var(axis=1)
             del df['moral']
         elif prob_map == 'single' and out_metrics == 'vice-virtue':
-            mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
-                               'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
-                               'sanctity.virtue', 'authority.vice', 'sanctity.vice']
+            mfd_foundations = ['care.virtue', 'fairness.virtue', 'loyalty.virtue',
+                   'authority.virtue','sanctity.virtue',
+                   'care.vice','fairness.vice','loyalty.vice',
+                   'authority.vice','sanctity.vice']
             df['f_var'] = df[mfd_foundations].var(axis=1)
             
     if dic_type == 'mfd' or dic_type == 'mfd2':
         # Calculate variance
-        mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
-       'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
-       'sanctity.virtue', 'authority.vice', 'sanctity.vice']
+        mfd_foundations = ['care.virtue', 'fairness.virtue', 'loyalty.virtue',
+                   'authority.virtue','sanctity.virtue',
+                   'care.vice','fairness.vice','loyalty.vice',
+                   'authority.vice','sanctity.vice']
         
         df['f_var'] = df[mfd_foundations].var(axis=1)
         

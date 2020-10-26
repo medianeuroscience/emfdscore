@@ -42,9 +42,10 @@ with open(MFD, 'r') as f:
             else:
                 nummap[ent[0]] = ent[1]
                 
-mfd_foundations = ['care.virtue', 'care.vice', 'authority.virtue', 'fairness.vice',
-       'fairness.virtue', 'loyalty.vice', 'loyalty.virtue',
-       'sanctity.virtue', 'authority.vice', 'sanctity.vice', 'moral']
+mfd_foundations = ['care.virtue', 'fairness.virtue', 'loyalty.virtue',
+                   'authority.virtue','sanctity.virtue',
+                   'care.vice','fairness.vice','loyalty.vice',
+                   'authority.vice','sanctity.vice','moral']
 
 for v in mfd.keys():
     mfd_regex[v] = re.compile(fnmatch.translate(v))
