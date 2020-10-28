@@ -38,4 +38,4 @@ pip install https://github.com/medianeuroscience/emfdscore/archive/master.zip
 
 
 ## Usage 
-Please refer to this [tutorial](https://github.com/medianeuroscience/emfdscore/blob/master/eMFDscore_tutorial.ipynb) to learn how to use eMFDscore. 
+Please refer to this [tutorial](https://github.com/medianeuroscience/emfdscore/blob/master/eMFDscore_Tutorial.ipynb) to learn how to use eMFDscore. 
