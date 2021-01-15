@@ -1,6 +1,7 @@
 import nltk
 from nltk.corpus import stopwords
-from sklearn.feature_extraction.text.stop_words import ENGLISH_STOP_WORDS
+
+from sklearn.feature_extraction import text
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 import warnings
@@ -17,7 +18,7 @@ except:
     nltk.download('stopwords')
     nltk_stopwords = stopwords.words('english')
 
-stopwords = set(list(nltk_stopwords) + list(ENGLISH_STOP_WORDS) + list(STOP_WORDS))
+stopwords = set(list(nltk_stopwords) + list(text.ENGLISH_STOP_WORDS) + list(STOP_WORDS))
 
 # BoW Scoring #
 
