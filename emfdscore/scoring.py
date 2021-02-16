@@ -4,6 +4,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction import text
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
+from spacy.language import Language
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
@@ -21,7 +22,7 @@ except:
 stopwords = set(list(nltk_stopwords) + list(text.ENGLISH_STOP_WORDS) + list(STOP_WORDS))
 
 # BoW Scoring #
-
+@Language.component("mfd_tokenizer")
 def tokenizer(doc):
     
     """Performs minimal preprocessing on textual document.
@@ -31,7 +32,7 @@ def tokenizer(doc):
     
     return [x.lower_ for x in doc if x.lower_ not in stopwords and not x.is_punct and not x.is_digit and not x.is_quote and not x.like_num and not x.is_space]
 
-
+@Language.component("score_emfd_all_sent")
 def score_emfd_all_sent(doc):
     
     """Scores documents with the eMFD, where each word is assigned five probabilities and the average sentiment for each foundation 
@@ -73,6 +74,7 @@ def score_emfd_all_sent(doc):
     
     return emfd_score
 
+@Language.component("score_emfd_single_sent")
 def score_emfd_single_sent(doc):
     
     """Scores documents with the eMFD, where each word is assigned one probability and the associated average sentiment score."""
@@ -106,7 +108,7 @@ def score_emfd_single_sent(doc):
     
     return emfd_score
 
-
+@Language.component("score_emfd_all_vice_virtue")
 def score_emfd_all_vice_virtue(doc):
     
     """Scores documents with the eMFD, where each word is assigned ten vice-virtue scores."""
@@ -139,7 +141,7 @@ def score_emfd_all_vice_virtue(doc):
     
     return emfd_score
 
-
+@Language.component("score_emfd_single_vice_virtue")
 def score_emfd_single_vice_virtue(doc):
     
     """Scores documents with the eMFD, where each word is assigned one vice-virtue score."""
@@ -170,7 +172,7 @@ def score_emfd_single_vice_virtue(doc):
     
     return emfd_score
 
-
+@Language.component("score_mfd")
 def score_mfd(doc):
     
     """Scores documents with the original MFD."""
@@ -202,7 +204,7 @@ def score_mfd(doc):
     
     return mfd_score
 
-
+@Language.component("score_mfd2")
 def score_mfd2(doc):
     
     """Scores documents with the MFD2."""
@@ -322,22 +324,22 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
             df = df[['cnt']+probabilites+senti]
             return df
 
-    nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser', 'tagger'])
-    nlp.add_pipe(tokenizer, name="mfd_tokenizer")
+    nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser'])
+    nlp.add_pipe("mfd_tokenizer")
     
     if dic_type == 'emfd':
         if prob_map == 'all' and out_metrics == 'sentiment':
-            nlp.add_pipe(score_emfd_all_sent, name="score_emfd_all_sent", last=True)
+            nlp.add_pipe("score_emfd_all_sent", last=True)
         elif prob_map == 'all' and out_metrics == 'vice-virtue':
-            nlp.add_pipe(score_emfd_all_vice_virtue, name="score_emfd_all_vice_virtue", last=True)
+            nlp.add_pipe("score_emfd_all_vice_virtue", last=True)
         elif prob_map == 'single' and out_metrics == 'sentiment':
-            nlp.add_pipe(score_emfd_single_sent, name="score_emfd_single_sent", last=True)
+            nlp.add_pipe("score_emfd_single_sent", last=True)
         elif prob_map == 'single' and out_metrics == 'vice-virtue':
-            nlp.add_pipe(score_emfd_single_vice_virtue, name="score_emfd_single_vice_virtue", last=True)
+            nlp.add_pipe("score_emfd_single_vice_virtue", last=True)
     elif dic_type == 'mfd':
-        nlp.add_pipe(score_mfd, name="score_mfd", last=True)
+        nlp.add_pipe("score_mfd", last=True)
     elif dic_type == 'mfd2':
-        nlp.add_pipe(score_mfd2, name="score_mfd2", last=True)
+        nlp.add_pipe("score_mfd2", last=True)
     else:
         print('Dictionary type not recognized. Available values are: emfd, mfd, mfd2')
         return 
@@ -401,7 +403,7 @@ def find_ent(token, entities):
         if token in v:
             return k
 
-
+@Language.component("spacy_ner")
 def spacy_ner(doc):
     include_ents = ['PERSON','NORP', 'GPE']
     entities = {ent.text:ent.text.split(' ') for ent in doc.ents if ent.label_ in include_ents}
@@ -411,7 +413,7 @@ def spacy_ner(doc):
     
     return ner_out
 
-
+@Language.component("extract_dependencies")
 def extract_dependencies(ner_out):
     doc = ner_out['doc']
     cc_processed= ner_out['cc_processed']
@@ -487,7 +489,7 @@ def extract_dependencies(ner_out):
         
     return cc_processed
 
-
+@Language.component("drop_ents")
 def drop_ents(cc_processed):
     
     """Deletes entities w/out any related words."""
@@ -505,7 +507,7 @@ def drop_ents(cc_processed):
         
     return cc_processed
 
-
+@Language.component("mean_pat")
 def mean_pat(cc_processed):
     
     """Calculates the average emfd scores for
@@ -546,10 +548,10 @@ def pat_docs(csv,num_docs):
     
     # Build spaCy pipeline
     nlp = spacy.load('en_core_web_sm')
-    nlp.add_pipe(spacy_ner, name='NER')
-    nlp.add_pipe(extract_dependencies, name='PAT extraction')
-    nlp.add_pipe(drop_ents, name='drop empty entities')
-    nlp.add_pipe(mean_pat, name='average PAT scores and return final df')
+    nlp.add_pipe("spacy_ner")
+    nlp.add_pipe("extract_dependencies")
+    nlp.add_pipe("drop_ents")
+    nlp.add_pipe("mean_pat")
     
     scored_docs = []
     widgets = [
