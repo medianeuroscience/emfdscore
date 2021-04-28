@@ -40,9 +40,7 @@ pip install https://github.com/medianeuroscience/emfdscore/archive/master.zip
 ## Usage 
 Please refer to this [tutorial](https://github.com/medianeuroscience/emfdscore/blob/master/eMFDscore_Tutorial.ipynb) to learn how to use eMFDscore. 
 
-If you are using the eMFD within the [Global Database of Events, Language, and Tone (GDELT)](https://blog.gdeltproject.org/examining-trends-in-moral-news-framing-across-a-decade-of-television-coverage/) please note the following: 
-
-In GDELT, the eMFD is being applied as if you ran the `bow emfd all sentiment` option in eMFDscore. Please check cell 3 & 4 in the [tutorial](https://github.com/medianeuroscience/emfdscore/blob/master/eMFDscore_Tutorial.ipynb). Note that GDELT returns the scores per DOCUMENT (not word!), and hence you receive the average 5 probabilities and the average 5 sentiments per DOCUMENT. With this data, it is only possible to obtain either VIRTUE or VICE scores per document (because the average sentiment of the document is either positive or negative...).
+If you are using the eMFD within the [Global Database of Events, Language, and Tone (GDELT)](https://blog.gdeltproject.org/examining-trends-in-moral-news-framing-across-a-decade-of-television-coverage/) please read the following [documentation](https://github.com/medianeuroscience/emfdscore/blob/master/emfd_gdelt_readme.pdf).
 
 ## Applications 
 The eMFD has been used in the following applications:
