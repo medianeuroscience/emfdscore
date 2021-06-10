@@ -36,6 +36,18 @@ Finally, you can install eMFDscore by copying, pasting, and executing the follow
 pip install https://github.com/medianeuroscience/emfdscore/archive/master.zip
 `
 
+### eMFDscore in Google Colaboratory
+
+eMFDscore can also be run in [google colab](https://colab.research.google.com/notebooks/intro.ipynb). All you need to do is add these lines to the beginning of your notebook, execute them, and then restart your runtime:
+
+```
+!pip install -U pip setuptools wheel
+!pip install -U spacy
+!python -m spacy download en_core_web_sm
+!pip install git+https://github.com/medianeuroscience/emfdscore.git
+```
+
+You can then use eMFDscore as a python library as documented in our [tutorial](https://github.com/medianeuroscience/emfdscore/blob/master/eMFDscore_Tutorial.ipynb). 
 
 ## Usage 
 Please refer to this [tutorial](https://github.com/medianeuroscience/emfdscore/blob/master/eMFDscore_Tutorial.ipynb) to learn how to use eMFDscore. 
