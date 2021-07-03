@@ -56,6 +56,8 @@ If you are using the eMFD within the [Global Database of Events, Language, and T
 
 ## Applications 
 The eMFD has been used in the following applications:
+- [Van Vliet, L. (2021). Moral expressions in 280 characters or less: An Analysis of Politician tweets following the 2016 Brexit referendum vote. Frontiers in Big Data, 4, 49.](https://www.frontiersin.org/articles/10.3389/fdata.2021.699653/full)
 - [Priniski, J. H., Mokhberian, N., Harandizadeh, B., Morstatter, F., Lerman, K., Lu, H., & Brantingham, P. J. (2021). Mapping Moral Valence of Tweets Following the Killing of George Floyd. arXiv preprint arXiv:2104.09578.](https://arxiv.org/abs/2104.09578)
+
 
 For using the eMFD on shorter texts (e.g., tweets and news headlines), we suggest to apply the eMFD in a [FrameAxis](https://github.com/negar-mokhberian/Moral_Foundation_FrameAxis).
