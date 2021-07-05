@@ -52,12 +52,13 @@ You can then use eMFDscore as a python library as documented in our [tutorial](h
 ## Usage 
 Please refer to this [tutorial](https://github.com/medianeuroscience/emfdscore/blob/master/eMFDscore_Tutorial.ipynb) to learn how to use eMFDscore. 
 
-If you are using the eMFD within the [Global Database of Events, Language, and Tone (GDELT)](https://blog.gdeltproject.org/examining-trends-in-moral-news-framing-across-a-decade-of-television-coverage/) please read the following [documentation](https://github.com/medianeuroscience/emfdscore/blob/master/emfd_gdelt_readme.pdf).
-
-## Applications 
-The eMFD has been used in the following applications:
-- [Van Vliet, L. (2021). Moral expressions in 280 characters or less: An Analysis of Politician tweets following the 2016 Brexit referendum vote. Frontiers in Big Data, 4, 49.](https://www.frontiersin.org/articles/10.3389/fdata.2021.699653/full)
-- [Priniski, J. H., Mokhberian, N., Harandizadeh, B., Morstatter, F., Lerman, K., Lu, H., & Brantingham, P. J. (2021). Mapping Moral Valence of Tweets Following the Killing of George Floyd. arXiv preprint arXiv:2104.09578.](https://arxiv.org/abs/2104.09578)
-
+If you are using the eMFD within the [Global Database of Events, Language, and Tone (GDELT)](https://blog.gdeltproject.org/examining-trends-in-moral-news-framing-across-a-decade-of-television-coverage/) please read the following [documentation](https://github.com/medianeuroscience/emfdscore/blob/master/emfd_gdelt_readme.pdf).  
 
 For using the eMFD on shorter texts (e.g., tweets and news headlines), we suggest to apply the eMFD in a [FrameAxis](https://github.com/negar-mokhberian/Moral_Foundation_FrameAxis).
+
+## Applications 
+The eMFD has been used in the following applications (ordered by date of publication):
+- [Van Vliet, L. (2021). Moral expressions in 280 characters or less: An Analysis of Politician tweets following the 2016 Brexit referendum vote. Frontiers in Big Data, 4, 49.](https://www.frontiersin.org/articles/10.3389/fdata.2021.699653/full)
+- [Priniski, J. H., Mokhberian, N., Harandizadeh, B., Morstatter, F., Lerman, K., Lu, H., & Brantingham, P. J. (2021). Mapping Moral Valence of Tweets Following the Killing of George Floyd. arXiv preprint arXiv:2104.09578.](https://arxiv.org/abs/2104.09578)
+- [Hopp, F. R., Fisher, J. T., & Weber, R. (2020). A graph-learning approach for detecting moral conflict in movie scripts. Media and Communication, 8(3), 164.](https://www.cogitatiopress.com/mediaandcommunication/article/view/3155)
+
