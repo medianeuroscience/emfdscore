@@ -58,6 +58,7 @@ For using the eMFD on shorter texts (e.g., tweets and news headlines), we sugges
 
 ## Applications 
 The eMFD has been used in the following applications (ordered by date of publication):
+- [Chen, Kaiping, Zening Duan, and Sijia Yang. "Twitter as research data: Tools, costs, skill sets, and lessons learned." Politics and the Life Sciences (2021): 1-17.](https://www.cambridge.org/core/journals/politics-and-the-life-sciences/article/twitter-as-research-data/6B31D18C5E2F9B8F9C0301BFB05F1C27)
 - [Van Vliet, L. (2021). Moral expressions in 280 characters or less: An Analysis of Politician tweets following the 2016 Brexit referendum vote. Frontiers in Big Data, 4, 49.](https://www.frontiersin.org/articles/10.3389/fdata.2021.699653/full)
 - [Priniski, J. H., Mokhberian, N., Harandizadeh, B., Morstatter, F., Lerman, K., Lu, H., & Brantingham, P. J. (2021). Mapping Moral Valence of Tweets Following the Killing of George Floyd. arXiv preprint arXiv:2104.09578.](https://arxiv.org/abs/2104.09578)
 - [Hopp, F. R., Fisher, J. T., & Weber, R. (2020). A graph-learning approach for detecting moral conflict in movie scripts. Media and Communication, 8(3), 164.](https://www.cogitatiopress.com/mediaandcommunication/article/view/3155)
