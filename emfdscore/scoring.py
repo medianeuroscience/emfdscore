@@ -380,6 +380,7 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
                    'authority.virtue','sanctity.virtue',
                    'care.vice','fairness.vice','loyalty.vice',
                    'authority.vice','sanctity.vice']
+            del df['moral']
             df['f_var'] = df[mfd_foundations].var(axis=1)
             
     if dic_type == 'mfd' or dic_type == 'mfd2':
