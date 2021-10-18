@@ -374,7 +374,6 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
                    'care.vice','fairness.vice','loyalty.vice',
                    'authority.vice','sanctity.vice']
             df['f_var'] = df[mfd_foundations].var(axis=1)
-            del df['moral']
         elif prob_map == 'single' and out_metrics == 'vice-virtue':
             mfd_foundations = ['care.virtue', 'fairness.virtue', 'loyalty.virtue',
                    'authority.virtue','sanctity.virtue',
