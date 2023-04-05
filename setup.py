@@ -13,7 +13,6 @@ setup(name='emfdscore',
       install_requires=[
           'pandas',
           'progressbar2',
-          'sklearn',
           'nltk',
           'numpy'
       ],
