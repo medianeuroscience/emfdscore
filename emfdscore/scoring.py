@@ -163,7 +163,7 @@ def score_emfd_single_vice_virtue(doc):
         except ZeroDivisionError:
             emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
     else:
-        emfd_score = {k: 0 for k in mfd_foundations}
+        emfd_score = {k: 0 for k in mfd_foundations if k !='moral'}
         nonmoral_words = len(doc) - len(moral_words)
         try:
             emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
