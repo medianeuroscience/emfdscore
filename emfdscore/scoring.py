@@ -3,6 +3,7 @@ from nltk.corpus import stopwords
 
 from sklearn.feature_extraction import text
 import spacy
+from spacy.tokens import Doc
 from spacy.lang.en.stop_words import STOP_WORDS
 from spacy.language import Language
 import warnings
@@ -30,147 +31,204 @@ def tokenizer(doc):
     stopword/punctuation/whitespace removal. 
     Returns list of processed tokens"""
     
-    return [x.lower_ for x in doc if x.lower_ not in stopwords and not x.is_punct and not x.is_digit and not x.is_quote and not x.like_num and not x.is_space]
+    filtered_token_texts = [x.lower_ for x in doc if x.lower_ not in stopwords and not x.is_punct and not x.is_digit and not x.is_quote and not x.like_num and not x.is_space]
+
+    return Doc(doc.vocab, words=filtered_token_texts)
 
 @Language.component("score_emfd_all_sent")
 def score_emfd_all_sent(doc):
-    
-    """Scores documents with the eMFD, where each word is assigned five probabilities and the average sentiment for each foundation 
-    is returned."""
+    """Scores documents with the eMFD, where each word is assigned one probability and the associated average sentiment score."""
+
+    # This list will contain the score dictionaries for words found in emfd.
+    moral_words_data = [emfd[token.text] for token in doc if token.text in emfd]
+
+    num_moral_words = len(moral_words_data) # Get the count of found words
 
     # Initiate dictionary to store scores
-    emfd_score = {k: 0 for k in probabilites+senti}
+    emfd_score = {k: 0 for k in probabilites + senti}
 
-    # Collect e-MFD data for all moral words in document
-    moral_words = [emfd[token] for token in doc if token in emfd.keys()]
-    
-    for dic in moral_words:
-        emfd_score['care_p'] += dic['care_p']
-        emfd_score['fairness_p'] += dic['fairness_p']
-        emfd_score['loyalty_p'] += dic['loyalty_p']
-        emfd_score['authority_p'] += dic['authority_p']
-        emfd_score['sanctity_p'] += dic['sanctity_p']
+    for score_dict in moral_words_data:
+        emfd_score['care_p'] += score_dict.get('care_p', 0) # Uses .get(key, default)
+        emfd_score['fairness_p'] += score_dict.get('fairness_p', 0)
+        emfd_score['loyalty_p'] += score_dict.get('loyalty_p', 0)
+        emfd_score['authority_p'] += score_dict.get('authority_p', 0)
+        emfd_score['sanctity_p'] += score_dict.get('sanctity_p', 0)
+        emfd_score['care_sent'] += score_dict.get('care_sent', 0)
+        emfd_score['fairness_sent'] += score_dict.get('fairness_sent', 0)
+        emfd_score['loyalty_sent'] += score_dict.get('loyalty_sent', 0)
+        emfd_score['authority_sent'] += score_dict.get('authority_sent', 0)
+        emfd_score['sanctity_sent'] += score_dict.get('sanctity_sent', 0)
+
+    if num_moral_words != 0:  # calculate final scores
         
-        emfd_score['care_sent'] += dic['care_sent']
-        emfd_score['fairness_sent'] += dic['fairness_sent']
-        emfd_score['loyalty_sent'] += dic['loyalty_sent']
-        emfd_score['authority_sent'] += dic['authority_sent']
-        emfd_score['sanctity_sent'] += dic['sanctity_sent']
+        # averages
+        for key in emfd_score:
+            emfd_score[key] = emfd_score[key] / num_moral_words
 
-    if len(moral_words) != 0:
-        emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
-        nonmoral_words = len(doc)-len(moral_words)
+        # ratios
+        num_total_words = len(doc)
+        num_nonmoral_words = num_total_words - num_moral_words
         try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+            emfd_score['moral_nonmoral_ratio'] = num_moral_words / float(num_nonmoral_words) if num_nonmoral_words != 0 else float(num_moral_words)
+
+            if num_nonmoral_words == 0 and num_moral_words > 0:
+                 emfd_score['moral_nonmoral_ratio'] = float(num_moral_words)
+                 emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
         except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
-    else:
-        emfd_score = {k: 0 for k in probabilites + senti}
-        nonmoral_words = len(doc) - len(moral_words)
-        try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
-        except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
-    
-    return emfd_score
+            emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
+    else: # if num_moral_words == 0 // if no moral words were found
+        emfd_score['moral_nonmoral_ratio'] = 0.0  # scores remain 0
+
+    doc.user_data['emfd_score'] = emfd_score
+    return doc
+
 
 @Language.component("score_emfd_single_sent")
 def score_emfd_single_sent(doc):
-    
     """Scores documents with the eMFD, where each word is assigned one probability and the associated average sentiment score."""
 
-    # Initiate dictionary to store scores
-    emfd_score = {k: 0 for k in probabilites+senti}
+    # uses .get for safer dictionary access
+    moral_words_data = [emfd_single_sent.get(token.text)
+                        for token in doc if token.text in emfd_single_sent]
+    
+    # filters out potential "none"
+    moral_words_data = [item for item in moral_words_data if item is not None]
 
-    # Collect e-MFD data for all moral words in document
-    moral_words = [emfd_single_sent[token] for token in doc if token in emfd_single_sent.keys()]
+    num_moral_words = len(moral_words_data)
+ 
+    # Initiate dictionary
+    emfd_score = {k: 0 for k in probabilites + senti}
     
-    for dic in moral_words:
-        base_f = dic['foundation'].split('_')[0]
-        emfd_score[dic['foundation']] += dic['score']
-        emfd_score[base_f+'_sent'] += dic['sentiment']
-        
-      
-    if len(moral_words) != 0:
-        emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
-        nonmoral_words = len(doc)-len(moral_words)
+    emfd_score['moral_nonmoral_ratio'] = 0.0
+
+    for score_dict in moral_words_data:
+        foundation_str = score_dict.get('foundation')
+        score_val = score_dict.get('score', 0)
+        sentiment_val = score_dict.get('sentiment', 0)
+
+        if foundation_str:
+            emfd_score[foundation_str] = emfd_score.get(foundation_str, 0) + score_val
+
+            base_f = foundation_str.split('_')[0] # Get 'care' from 'care_p'
+            sent_key = base_f + '_sent'
+            emfd_score[sent_key] = emfd_score.get(sent_key, 0) + sentiment_val
+        else:
+             print(f"Warning: Word data missing 'foundation' key: {score_dict}")
+
+    # averages
+    if num_moral_words != 0:
+        for key in list(emfd_score.keys()):
+             if key != 'moral_nonmoral_ratio':
+                 emfd_score[key] = emfd_score[key] / num_moral_words
+
+        # Calculate ratio
+        num_total_words = len(doc)
+        num_nonmoral_words = num_total_words - num_moral_words
         try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+            if num_nonmoral_words != 0:
+                 emfd_score['moral_nonmoral_ratio'] = num_moral_words / float(num_nonmoral_words)
+            elif num_moral_words > 0:
+                 emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
         except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
-    else:
-        emfd_score = {k: 0 for k in probabilites + senti}
-        nonmoral_words = len(doc) - len(moral_words)
-        try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
-        except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
-    
-    return emfd_score
+            emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
+    doc.user_data['emfd_single_sent_score'] = emfd_score
+    return doc
 
 @Language.component("score_emfd_all_vice_virtue")
 def score_emfd_all_vice_virtue(doc):
-    
+
     """Scores documents with the eMFD, where each word is assigned ten vice-virtue scores."""
 
-    # Initiate dictionary to store scores
-    emfd_score = {k: 0 for k in mfd_foundations}
+    # uses .get for safer dictionary access
+    moral_words_data = [emfd_all_vice_virtue.get(token.text)
+                        for token in doc if token.text in emfd_all_vice_virtue]
+    
+    # filters potential none
+    moral_words_data = [item for item in moral_words_data if item is not None]
 
-    # Collect e-MFD data for all moral words in document
-    moral_words = [emfd_all_vice_virtue[token] for token in doc if token in emfd_all_vice_virtue.keys()]
+    num_moral_words = len(moral_words_data)
+
+    # Initiate dictionary
+    emfd_score = {k: 0 for k in mfd_foundations}
     
-    for dic in moral_words:
+    emfd_score['moral_nonmoral_ratio'] = 0.0
+
+    for score_dict in moral_words_data:
         for f in mfd_foundations:
-            if f != 'moral':
-                emfd_score[f] += dic[f]
-        
-    if len(moral_words) != 0:
-        emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
-        nonmoral_words = len(doc)-len(moral_words)
+             if f != 'moral':
+                 emfd_score[f] += score_dict.get(f, 0)
+
+    # averages
+    if num_moral_words != 0:
+        for key in list(emfd_score.keys()): 
+             if key != 'moral_nonmoral_ratio':
+                 emfd_score[key] = emfd_score[key] / num_moral_words
+
+        # Calculate ratio
+        num_total_words = len(doc)
+        num_nonmoral_words = num_total_words - num_moral_words
         try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
+            if num_nonmoral_words != 0:
+                 emfd_score['moral_nonmoral_ratio'] = num_moral_words / float(num_nonmoral_words)
+            elif num_moral_words > 0:
+                 emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
         except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
-    else:
-        emfd_score = {k: 0 for k in mfd_foundations}
-        nonmoral_words = len(doc) - len(moral_words)
-        try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
-        except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
-    
-    return emfd_score
+            emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
+    doc.user_data['emfd_vv_score'] = emfd_score
+    return doc
+
 
 @Language.component("score_emfd_single_vice_virtue")
 def score_emfd_single_vice_virtue(doc):
-    
+
     """Scores documents with the eMFD, where each word is assigned one vice-virtue score."""
 
-    # Initiate dictionary to store scores
-    emfd_score = {k:0 for k in mfd_foundations if k !='moral'}
+    # uses .get for safer dictionary access
+    moral_words_data = [emfd_single_vice_virtue.get(token.text)
+                        for token in doc if token.text in emfd_single_vice_virtue]
+    moral_words_data = [item for item in moral_words_data if item is not None]
 
-    # Collect e-MFD data for all moral words in document
-    moral_words = [emfd_single_vice_virtue[token] for token in doc if token in emfd_single_vice_virtue.keys()]
-    
-    for dic in moral_words:
-        emfd_score[dic['foundation']] += dic['score']
+    num_moral_words = len(moral_words_data) # Get the count of found words
 
-    if len(moral_words) != 0:
-        emfd_score = {k: v/len(moral_words) for k, v in emfd_score.items()}
-        nonmoral_words = len(doc)-len(moral_words)
-        try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
-        except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
-    else:
-        emfd_score = {k: 0 for k in mfd_foundations if k !='moral'}
-        nonmoral_words = len(doc) - len(moral_words)
-        try:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / nonmoral_words
-        except ZeroDivisionError:
-            emfd_score['moral_nonmoral_ratio'] = len(moral_words) / 1
+    # Initialize dictionary
+    emfd_score = {k: 0 for k in mfd_foundations if k != 'moral'}
     
-    return emfd_score
+    emfd_score['moral_nonmoral_ratio'] = 0.0
+
+    for score_dict in moral_words_data:
+        foundation_str = score_dict.get('foundation')
+        score_val = score_dict.get('score', 0)
+
+        if foundation_str and foundation_str != 'moral':
+            emfd_score[foundation_str] = emfd_score.get(foundation_str, 0) + score_val
+
+    # finals - averages + ratios
+    if num_moral_words != 0:
+        for key in list(emfd_score.keys()):
+             if key != 'moral_nonmoral_ratio':
+                 emfd_score[key] = emfd_score[key] / num_moral_words
+
+        num_total_words = len(doc)
+        num_nonmoral_words = num_total_words - num_moral_words
+        try:
+            if num_nonmoral_words != 0:
+                 emfd_score['moral_nonmoral_ratio'] = num_moral_words / float(num_nonmoral_words)
+            elif num_moral_words > 0:
+                 emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
+        except ZeroDivisionError:
+            emfd_score['moral_nonmoral_ratio'] = num_moral_words / 1.0
+
+
+    doc.user_data['emfd_single_vv_score'] = emfd_score
+    return doc
+
 
 @Language.component("score_mfd")
 def score_mfd(doc):
@@ -237,6 +295,18 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
     """Wrapper function that executes functions for preprocessing and dictionary scoring.
     dict_type specifies the dicitonary with which the documents should be scored.
     Accepted values are: [emfd, mfd, mfd2]"""
+
+    user_data_key = None
+    if dic_type == 'emfd':
+        if prob_map == 'all' and out_metrics == 'sentiment':
+            user_data_key = 'emfd_score' # Key from score_emfd_all_sent
+        elif prob_map == 'all' and out_metrics == 'vice-virtue':
+            user_data_key = 'emfd_vv_score' # Key from score_emfd_all_vice_virtue
+        elif prob_map == 'single' and out_metrics == 'sentiment':
+            user_data_key = 'emfd_single_sent_score' # Key from score_emfd_single_sent
+        elif prob_map == 'single' and out_metrics == 'vice-virtue':
+            user_data_key = 'emfd_single_vv_score' # Key from score_emfd_single_vice_virtue
+ 
 
     if score_type == 'wordlist':
         widgets = [
@@ -345,6 +415,7 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
         return 
 
     scored_docs = []
+    scored_docs_results = []
     widgets = [
         'Processed: ', progressbar.Counter(),
         ' ', progressbar.Percentage(),
@@ -353,13 +424,20 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
         ' ', progressbar.ETA(),
     ]
 
-    
+
     with progressbar.ProgressBar(max_value=num_docs, widgets=widgets) as bar:
-        for i, row in csv[0].iteritems():
-            scored_docs.append(nlp(row))
+        for i, row in csv[0].items():
+            processed_doc = nlp(row)
+
+            if user_data_key in processed_doc.user_data:
+                scored_docs_results.append(processed_doc.user_data[user_data_key])
+            else:
+                print(f"Warning: {user_data_key} not found in user_data for item {i}. Appending empty/default dict.")
+                scored_docs_results.append({})
+
             bar.update(i)
 
-    df = pd.DataFrame(scored_docs)
+    df = pd.DataFrame(scored_docs_results)
     
     if dic_type == 'emfd':
         if prob_map == 'all' and out_metrics == 'sentiment':
