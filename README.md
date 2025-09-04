@@ -26,7 +26,7 @@ Once Anaconda/Miniconda is installed activate the env via:
 $ source activate emfd
 ```
 
-Next, you must install spaCy, which is the main natural language processing backend that emacscore is built on:
+Next, you must install spaCy, which is the main natural language processing backend that eMFDscore is built on:
 
 ```
 $ conda install -c conda-forge spacy
