@@ -13,9 +13,6 @@ from collections import Counter
 from emfdscore.load_mfds import *
 import progressbar
 
-# -----------------------------
-# Stopwords (unified set)
-# -----------------------------
 try:
     nltk_stopwords = nltk_sw.words('english')
 except Exception:
@@ -55,9 +52,7 @@ def _ensure_doc_extensions():
 
 _ensure_doc_extensions()
 
-# -----------------------------
-# Helpers
-# -----------------------------
+
 def _safe_ratio(num: int, denom: int) -> float:
     return num / (denom if denom != 0 else 1)
 
@@ -82,9 +77,7 @@ def mfd_tokenizer(doc):
     doc._.mfd_tokens = [t.lower_ for t in filtered_tokens]
     return doc
 
-# -----------------------------
-# eMFD Components
-# -----------------------------
+
 @Language.component("score_emfd_all_sent")
 def score_emfd_all_sent(doc):
     tokens = doc._.mfd_tokens or [t.lower_ for t in doc]
@@ -154,9 +147,6 @@ def score_emfd_single_vice_virtue(doc):
     doc._.score_emfd_single_vice_virtue = emfd_score
     return doc
 
-# -----------------------------
-# MFD and MFD2 Components
-# -----------------------------
 @Language.component("score_mfd")
 def score_mfd(doc):
     tokens = doc._.mfd_tokens or [t.lower_ for t in doc]
@@ -193,24 +183,9 @@ def score_mfd2(doc):
     doc._.score_mfd2 = mfd2_score
     return doc
 
-# -----------------------------
-# Wrapper: score_docs (retains original modes)
-# -----------------------------
-def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
-    """
-    Unified wrapper that preserves original functionality but uses spaCy-compliant
-    components and Doc extensions for scoring.
 
-    Arguments mirror the original version:
-    - dic_type: emfd | mfd | mfd2
-    - prob_map: all | single   (only for dic_type='emfd')
-    - score_type: default | wordlist | gdelt.ngrams
-    - out_metrics: sentiment | vice-virtue
-    - num_docs: for progress bar
-    """
-    # -----------------
-    # Special input modes (retain original behavior)
-    # -----------------
+def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
+
     if score_type == 'wordlist':
         widgets = ['Processed: ', progressbar.Counter(), ' ', progressbar.Percentage(),
                    ' ', progressbar.Bar(marker='❤'), ' ', progressbar.Timer(), ' ', progressbar.ETA()]
@@ -264,9 +239,6 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
             df = df[['cnt'] + probabilites + senti]
             return df
 
-    # -----------------
-    # Default: spaCy pipeline scoring
-    # -----------------
     nlp = spacy.load('en_core_web_sm', disable=['ner', 'parser'])
     nlp.add_pipe("mfd_tokenizer")
 
@@ -342,9 +314,6 @@ def score_docs(csv, dic_type, prob_map, score_type, out_metrics, num_docs):
 
     return df
 
-# -----------------------------
-# PAT extraction components (spaCy-compliant)
-# -----------------------------
 def find_ent(token, entities):
     for k, v in entities.items():
         if token in v:
@@ -475,14 +444,8 @@ def mean_pat(doc):
     doc._.pat_df = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
     return doc
 
-# -----------------------------
-# PAT wrapper (retains original outputs, spaCy-compliant)
-# -----------------------------
 def pat_docs(csv, num_docs):
-    """
-    Run PAT extraction pipeline and return concatenated DataFrame.
-    Retains original column ordering when available.
-    """
+    
     nlp = spacy.load('en_core_web_sm')
     nlp.add_pipe("spacy_ner")
     nlp.add_pipe("extract_dependencies")
