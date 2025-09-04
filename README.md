@@ -8,6 +8,8 @@ Hopp, F. R., Fisher, J. T., Cornell, D., Huskey, R., & Weber, R. (2020). The ext
 
 eMFDscore is dual-licensed under GNU GENERAL PUBLIC LICENSE 3.0, which permits the non-commercial use, distribution, and modification of the eMFDscore package. Commercial use of the eMFDscore requires an [application](https://forms.gle/RSKzZ2DvDyaprfeE8).
 
+If you have any questions and/or require additional assistance with running the package, feel free to connect directly with the package maintainer, **Musa Malik**, via their [LinkedIn](https://www.linkedin.com/in/musainayatmalik/). 
+
 ## Install 
 **eMFDscore** requires a Python installation (v3.11+). If your machine does not have Python installed, we recommend installing Python by downloading and installing either [Anaconda or Miniconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/index.html) for your OS.
 
